@@ -1,3 +1,5 @@
+There is no "display EPUB" library out there, because that is basically is an "HTML rendering engine". 
+What you probably want to do consists in writing a PyQt or Tinker app, wrapping an HTML renderer where you feed the HTML files of the EPUB, plus some chrome to control navigation, show the ToC, etc.
 ## Install Package WIth
 `dotnet add package EpubSharp.dll`
 
