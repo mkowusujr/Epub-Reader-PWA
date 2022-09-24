@@ -1,12 +1,24 @@
 @using EpubSharp;
-
+@using TodoList.Data
 @* <style>
     @((MarkupString)book.Resources.Css.ElementAt(1).TextContent)
 </style> *@
-
-@((MarkupString)book.Resources.Html.ElementAt(Chapter).TextContent)
-
+@* <p>sssss</p>*@
+<p>sss</p>
+@((MarkupString)html) 
+@* <style>
+    h2 {
+        background-color: red;
+    }
+</style> *@
 @code {
+    EBook booker = new EBook();
+    string html;
+    protected async override Task OnInitializedAsync()
+    {
+        html = await booker.GetHtml();
+        @* await base.OnInitializedAsync(); *@
+    }
     [Parameter]
     public int Chapter { get; set; } = 1;
     EpubBook book = EpubSharp.EpubReader.Read(@"C:\Users\mokay\Local-Repositories\Epub-Reader-PWA\Practice\Blazor\TodoList\Data\frankenstien.epub");

@@ -7,13 +7,13 @@
 @* <pre>
     @book.Resources.Html.ElementAt(0).TextContent
 </pre> *@
-@((MarkupString)book.Resources.Html.ElementAt(Chapter).TextContent)
+@* @((MarkupString)book.Resources.Html.ElementAt(Chapter).TextContent) *@
 @* <p>@book.TableOfContents.ElementAt(4).Title</p>
 <style>
     @((MarkupString)book.Resources.Css.ElementAt(1).TextContent)
 </style>
 @((MarkupString)book.Resources.Html.ElementAt(1).TextContent) *@
-
+<OneEpub Chapter="Chapter" />
 @code {
     [Parameter]
     public int Chapter { get; set; } = 1;

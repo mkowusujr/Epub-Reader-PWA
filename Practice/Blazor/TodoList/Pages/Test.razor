@@ -1,0 +1,14 @@
+@using EpubSharp;
+@page "/pgepub.css"
+<style>
+    @((MarkupString)book.Resources.Css.ElementAt(1).TextContent)
+</style>
+@* <p>sssss</p>
+@((MarkupString)book.Resources.Html.ElementAt(Chapter).TextContent) *@
+
+@code {
+    [Parameter]
+    public int Chapter { get; set; } = 1;
+    EpubBook book = EpubSharp.EpubReader.Read(@"C:\Users\mokay\Local-Repositories\Epub-Reader-PWA\Practice\Blazor\TodoList\Data\frankenstien.epub");
+    @* string html = book.Title; *@
+}
