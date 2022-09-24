@@ -18,3 +18,5 @@ Console.WriteLine();
 
 ICollection<EpubTextFile> htmlFiles = book.Resources.Html;
 Console.WriteLine(htmlFiles.Count());
+
+string text = htmlFiles.ElementAt(0).TextContent;
