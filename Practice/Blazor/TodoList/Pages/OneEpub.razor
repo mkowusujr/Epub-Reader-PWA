@@ -4,7 +4,6 @@
     @((MarkupString)book.Resources.Css.ElementAt(1).TextContent)
 </style> *@
 @* <p>sssss</p>*@
-<p>sss</p>
 <article>@ms</article>
 @* <style>
     .chapter h2 {
@@ -18,6 +17,7 @@
     protected async override Task OnInitializedAsync()
     {
         html = await booker.GetHtml();
+        await booker.GetTOF();
         ms = (MarkupString)html;
         @* await base.OnInitializedAsync(); *@
     }

@@ -7,11 +7,11 @@ public class EBook {
     public string hi = "Hello Ig";
 
     public async Task<string> GetHtml() {
-        var config = Configuration.Default;
-        using var context = BrowsingContext.New(config);
-        using var doc = await context.OpenAsync(req => req.Content(book.Resources.Html.ElementAt(1).TextContent));
-
-        return doc?.Body.InnerHtml.Trim();// var parser = new Parser();
+        // var config = Configuration.Default;
+        // using var context = BrowsingContext.New(config);
+        // using var doc = await context.OpenAsync(req => req.Content(book.Resources.Html.ElementAt(1).TextContent));
+        return await book.Resources.Html.ToParsedHtml().Where(d => d.All.Where(m => m.LocalName == "body").First());
+        // return doc?.Body.InnerHtml.Trim();// var parser = new Parser();
         // var document = parser.Parse(book.Resources.Html);
         // string html = document.All.Where(m => m.LocalName == "body").First();
         // return html;
@@ -42,9 +42,21 @@ public class EBook {
 public static class MyExtentions{
     public static IEnumerable<T> SetHref<T>(this IEnumerable<T> items, Action<T> updateMethod){
         foreach (T item in items){
-            
             updateMethod(item);
         }
         return items;
+    }
+
+    public static async Task<IEnumerable<T>> ToParsedHtml<T>(this IEnumerable<AngleSharp.Dom.IElement> items)
+    {
+            var config = Configuration.Default;
+            using var context = BrowsingContext.New(config);
+        IEnumerable<AngleSharp.Dom> parsedItems;
+        foreach (AngleSharp.Dom item in items)
+        {
+            using var doc = await context.OpenAsync(req => req.Content(item.TextContent));
+            parsedItems.Append(doc);
+        }
+        return parsedItems;
     }
 }
