@@ -1,14 +1,16 @@
 namespace EReaderSharp.Data;
 using EpubSharp;
 using AngleSharp;
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 
 /// <summary>
-/// 
+/// Extention methods for the epub reader service
 /// </summary>
 public static class EpubReaderServiceExtentions
 {
     /// <summary>
-    /// 
+    /// Updates the dom elements
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="items"></param>
@@ -24,23 +26,17 @@ public static class EpubReaderServiceExtentions
     }
 
     /// <summary>
-    /// 
+    /// Checks to see if the current section has the book section name in its first anchor element's id
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="items"></param>
-    /// <returns></returns>
-    public static async Task<IEnumerable<AngleSharp.Dom.Document>> ToParsedHtml<T>(this ICollection<EpubTextFile> items)
+    /// <param name="dom">The Html Dom</param>
+    /// <param name="bookSection">The section of the epub to fetch, usually are chapters</param>
+    /// <returns>Whether or not the id was found</returns>
+    public static bool IsCorrectPage(this AngleSharp.Dom.IDocument dom, string bookSection)
     {
-        var config = Configuration.Default;
-        using var context = BrowsingContext.New(config);
+        IHtmlAnchorElement? foundAnchorElement = dom.QuerySelectorAll("a")
+            .OfType<IHtmlAnchorElement>()
+            .FirstOrDefault(a => a.Id == bookSection);
 
-        List<AngleSharp.Dom.Document> parsedItems = new List<AngleSharp.Dom.Document>();
-
-        foreach (EpubTextFile item in items)
-        {
-            using var parsedHtml = await context.OpenAsync(req => req.Content(item.TextContent));
-            _ = parsedItems.Append(parsedHtml);
-        }
-        return (IEnumerable<AngleSharp.Dom.Document>)parsedItems;
+        return foundAnchorElement != null;
     }
 }

@@ -4,5 +4,8 @@ Practice/EpubReader/bin
 Practice/Blazor/TodoList/.vs
 Practice/Blazor/TodoList/bin
 Practice/Blazor/TodoList/obj
+/Epub Reader Sharp/EReaderSharp/.vs
 /Epub Reader Sharp/EReaderSharp/EReaderSharp/obj
-/Epub Reader Sharp/EReaderSharp/.vs/EReaderSharp
+Epub Reader Sharp/EReaderSharp/EReaderSharp/bin
+/Epub Reader Sharp/EReaderSharp/EReaderSharp.Tests/bin
+/Epub Reader Sharp/EReaderSharp/EReaderSharp.Tests/obj

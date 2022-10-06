@@ -43,11 +43,11 @@ public static class EpubReaderService
     /// unneeded info from the anchor elements
     /// </summary>
     /// <returns>A string containing multiple anchor elements</returns>
-    public static async Task<string> GetTableOfContents() {
+    public static string GetTableOfContents() {
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);
 
-        using var parsedDom = await context.OpenAsync(req => req.Content(Ebook.Resources.Html.ElementAt(0).TextContent));
+        using var parsedDom = context.OpenAsync(req => req.Content(Ebook.Resources.Html.ElementAt(0).TextContent)).Result;
 
         var anchorElements = parsedDom.QuerySelectorAll("a")
                             .OfType<IHtmlAnchorElement>()
@@ -60,13 +60,21 @@ public static class EpubReaderService
         return CleanedTableOfContents;
     }
 
-    public static async Task GetHtmlPage() {
+    /// <summary>
+    /// Gets a section of the epub
+    /// </summary>
+    /// <param name="bookSection">The section of the epub to fetch, usually are chapters</param>
+    /// <returns>Markdown string with the html body contents</returns>
+    public static string? GetHtmlPage(string bookSection) {
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);
 
-        using var parsedDom = await context.OpenAsync(req => req.Content(Ebook.Resources.Html.ElementAt(0).TextContent));
+        string? foundPage = Ebook.Resources.Html
+            .Skip(1)
+            .Select(h => context.OpenAsync(req => req.Content(h.TextContent)))
+            .First(dom => dom.Result.IsCorrectPage(bookSection))
+            .Result?.Body?.InnerHtml.Trim().ToString();
 
-        var pages = Ebook.Resources.Html.ToParsedHtml().Select;
+        return foundPage;
     }
 }
-
