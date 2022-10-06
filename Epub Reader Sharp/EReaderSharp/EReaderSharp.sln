@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EReaderSharp", "EReaderSharp\EReaderSharp.csproj", "{11109005-EAAD-4DBC-AE1D-6C0681AD11F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EReaderSharp.Tests", "EReaderSharp.Tests\EReaderSharp.Tests.csproj", "{FA9019F8-766D-4098-ACBD-579A6E5DA598}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{11109005-EAAD-4DBC-AE1D-6C0681AD11F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11109005-EAAD-4DBC-AE1D-6C0681AD11F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11109005-EAAD-4DBC-AE1D-6C0681AD11F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA9019F8-766D-4098-ACBD-579A6E5DA598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA9019F8-766D-4098-ACBD-579A6E5DA598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA9019F8-766D-4098-ACBD-579A6E5DA598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA9019F8-766D-4098-ACBD-579A6E5DA598}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
