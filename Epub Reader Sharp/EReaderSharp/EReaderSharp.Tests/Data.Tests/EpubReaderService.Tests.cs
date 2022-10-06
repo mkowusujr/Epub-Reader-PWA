@@ -1,7 +1,7 @@
 namespace EReaderSharp.Tests.Data.Tests;
 using EReaderSharp.Data;
 
-public class UnitTest1
+public class EReaderSharpServiceTests
 {
     const string TestEpubFile = @"C:\Users\mokay\Local-Repositories\Epub-Reader-PWA\Practice\Blazor\TodoList\Data\frankenstien.epub";
 
