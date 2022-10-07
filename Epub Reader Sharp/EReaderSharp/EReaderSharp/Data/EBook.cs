@@ -2,9 +2,9 @@
 
 public class EBook
 {
-    public int id { get; set; }
+    public int Id { get; set; }
 
-    public string filePath { get; set; }
+    public string FilePath { get; set; }
 
-    public bool isMarkAsFavorite { get; set; }
+    public bool IsMarkAsFavorite { get; set; }
 }
