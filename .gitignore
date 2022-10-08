@@ -1,9 +1,5 @@
 .vscode
-Practice/EpubReader/obj
-Practice/EpubReader/bin
-Practice/Blazor/TodoList/.vs
-Practice/Blazor/TodoList/bin
-Practice/Blazor/TodoList/obj
+/.vs
 /Epub Reader Sharp/EReaderSharp/.vs
 /Epub Reader Sharp/EReaderSharp/EReaderSharp/obj
 Epub Reader Sharp/EReaderSharp/EReaderSharp/bin
