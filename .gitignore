@@ -1,11 +1,7 @@
 .vscode
-.vs
-EReaderSharp/.vs
-EReaderSharp/EReaderSharp/obj
-EReaderSharp/EReaderSharp/bin
-EReaderSharp/EReaderSharp.Tests/bin
-EReaderSharp/EReaderSharp.Tests/obj
-/EReaderSharp/bin/Debug/net6.0
+/.vs
+/Epub Reader Sharp/EReaderSharp/.vs
+/EReaderSharp/bin/
 /EReaderSharp/obj
-/EReaderSharp.Tests/bin/Debug/net6.0
+/EReaderSharp.Tests/bin
 /EReaderSharp.Tests/obj
