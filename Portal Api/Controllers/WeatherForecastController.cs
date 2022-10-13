@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-
+using Portal_Api.Models;
 namespace Portal_Api.Controllers;
 
 [ApiController]

@@ -1,4 +1,4 @@
-namespace Portal_Api;
+namespace Portal_Api.Models;
 
 public class WeatherForecast
 {
