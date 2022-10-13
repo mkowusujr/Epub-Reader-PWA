@@ -22,6 +22,6 @@ public class EpubReaderController : ControllerBase
     public ActionResult<string> GetTableOfContents() => "";
 
     [HttpGet]
-    [Route("page/{id:int}")]
-    public ActionResult<string> GetPage() => "";
+    [Route("sections/{sectionName}")]
+    public ActionResult<string> GetPage(string sectionName) => "";
 }
