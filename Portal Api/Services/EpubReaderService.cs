@@ -6,7 +6,7 @@ using AngleSharp.Html.Dom;
 /// <summary>
 /// Service wrapper to parse epub files
 /// </summary>
-public class EpubReaderService
+public class EpubReaderService : IEpubReaderService
 {
     /// <summary>
     /// The parsed epub file
@@ -22,22 +22,14 @@ public class EpubReaderService
         Ebook = EpubReader.Read(filePath);
     }
 
-    /// <summary>
-    /// Gets the parsed epub's title
-    /// </summary>
-    /// <param name="bookId">The book identifier</param>
-    /// <returns>The parsed epub's title</returns>
+    /// <inheritdoc/>
     public string GetTitle(int bookId) {
         OpenEBook(bookId);
 
         return Ebook.Title;
     }
 
-    /// <summary>
-    /// Gets the parsed epub's author(s)
-    /// </summary>
-    /// <param name="bookId">The book identifier</param>
-    /// <returns>The parsed epub's author(s)</returns>
+    /// <inheritdoc/>
     public string GetAuthors(int bookId) {
         OpenEBook(bookId);
 
@@ -45,12 +37,7 @@ public class EpubReaderService
         return authors.Count == 1 ? authors[0] : String.Join(", ", authors);
     }
 
-    /// <summary>
-    /// Gets the table of contents for the epub and removes
-    /// unneeded info from the anchor elements
-    /// </summary>
-    /// <param name="bookId">The book identifier</param>
-    /// <returns>A string containing multiple anchor elements</returns>
+    /// <inheritdoc/>
     public string GetTableOfContents(int bookId) {
         OpenEBook(bookId);
 
@@ -70,12 +57,7 @@ public class EpubReaderService
         return CleanedTableOfContents;
     }
 
-    /// <summary>
-    /// Gets a section of the epub
-    /// </summary>
-    /// <param name="bookId">The book identifier</param>
-    /// <param name="bookSection">The section of the epub to fetch, usually are chapters</param>
-    /// <returns>Markdown string with the html body contents</returns>
+    /// <inheritdoc/>
     public string? GetHtmlPage(int bookId, string bookSection) {
         OpenEBook(bookId);
 
@@ -90,4 +72,4 @@ public class EpubReaderService
 
         return foundPage;
     }
-}
+

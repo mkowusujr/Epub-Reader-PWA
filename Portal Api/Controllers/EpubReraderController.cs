@@ -6,8 +6,8 @@ namespace Portal_Api.Controllers;
 [Route("epubreader")]
 public class EpubReaderController : ControllerBase
 {
-    private EpubReaderService _epubReaderService;
-    public EpubReaderController (EpubReaderService epubReaderService)
+    private IEpubReaderService _epubReaderService;
+    public EpubReaderController (IEpubReaderService epubReaderService)
     {
         _epubReaderService = epubReaderService;
     }
