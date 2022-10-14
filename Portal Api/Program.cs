@@ -1,6 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Portal_Api.Models;
+using Portal_Api.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<EBookMetaDataDbContext>(options => options.UseSqlite("Data Source = EBookMetaData.db"));
+builder.Services.AddScoped<IEBookMetaDataService, EBookMetaDataService>();
+builder.Services.AddScoped<IEpubReaderService, EpubReaderService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
