@@ -8,47 +8,37 @@ using AngleSharp.Html.Dom;
 /// </summary>
 public class EpubReaderService : IEpubReaderService
 {
-    /// <summary>
-    /// The parsed epub file
-    /// </summary>
-    private EpubBook Ebook { get; set; }
-
-    /// <summary>
-    /// Fetches the the ebook from the database and stores it in a EpubBook object
-    /// </summary>
-    /// <param name="bookId">The book identifier</param>
-    private void OpenEBook(int bookId)
+    /// <inheritdoc/>
+    public EpubBook ParsedEpubFile(string filename)
     {
-        string filePath = "";
-        Ebook = EpubReader.Read(filePath);
+        return EpubReader.Read(filename);
     }
 
     /// <inheritdoc/>
-    public string GetTitle(int bookId)
+    public string? GetTitle(EpubBook? eBook)
     {
-        OpenEBook(bookId);
-
-        return Ebook.Title;
+        return eBook?.Title;
     }
 
     /// <inheritdoc/>
-    public string GetAuthors(int bookId)
+    public string? GetAuthors(EpubBook? eBook)
     {
-        OpenEBook(bookId);
+        if (eBook != null)
+        {
+            List<string> authors = eBook.Authors.ToList();
+            return authors.Count == 1 ? authors[0] : String.Join(", ", authors);
+        }
 
-        List<string> authors = Ebook.Authors.ToList();
-        return authors.Count == 1 ? authors[0] : String.Join(", ", authors);
+        return null;
     }
 
     /// <inheritdoc/>
-    public string GetTableOfContents(int bookId)
+    public string? GetTableOfContents(EpubBook? eBook)
     {
-        OpenEBook(bookId);
-
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);
 
-        using var parsedDom = context.OpenAsync(req => req.Content(Ebook.Resources.Html.ElementAt(0).TextContent))
+        using var parsedDom = context.OpenAsync(req => req.Content(eBook?.Resources.Html.ElementAt(0).TextContent))
             .Result;
 
         var anchorElements = parsedDom.QuerySelectorAll("a")
@@ -63,14 +53,12 @@ public class EpubReaderService : IEpubReaderService
     }
 
     /// <inheritdoc/>
-    public string? GetHtmlPage(int bookId, string bookSection)
+    public string? GetHtmlPage(EpubBook? eBook, string bookSection)
     {
-        OpenEBook(bookId);
-
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);
 
-        string? foundPage = Ebook.Resources.Html
+        string? foundPage = eBook?.Resources.Html
             .Skip(1)
             .Select(h => context.OpenAsync(req => req.Content(h.TextContent)))
             .First(dom => dom.Result.IsCorrectPage(bookSection))
