@@ -1,27 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
-
+using Portal_Api.Services;
 namespace Portal_Api.Controllers;
 
 [ApiController]
 [Route("epubreader")]
 public class EpubReaderController : ControllerBase
 {
-    [HttpPost]
-    public void OpenEBook() {}
+    private EpubReaderService _epubReaderService;
+    public EpubReaderController (EpubReaderService epubReaderService)
+    {
+        _epubReaderService = epubReaderService;
+    }
 
-    [HttpGet]
-    [Route("title")]
-    public ActionResult<string> GetTitle() => "";
+    [HttpGet("read-book/{bookId}/title")]
+    public ActionResult<string> GetTitle(int bookId) => 
+        _epubReaderService.GetTitle(bookId);
 
-    [HttpGet]
-    [Route("authors")]
-    public ActionResult<string> GetAuthors() => "";
+    [HttpGet("read-book/{id}/authors")]
+    public ActionResult<string> GetAuthors(int bookId) => 
+        _epubReaderService.GetAuthors(bookId);
 
-    [HttpGet]
-    [Route("tableofcontents")]
-    public ActionResult<string> GetTableOfContents() => "";
+    [HttpGet("read-book/{id}/tableofcontents")]
+    public ActionResult<string> GetTableOfContents(int bookId) => 
+        _epubReaderService.GetTableOfContents(bookId);
 
-    [HttpGet]
-    [Route("sections/{sectionName}")]
-    public ActionResult<string> GetPage(string sectionName) => "";
+    [HttpGet("read-book/{id}/sections/{sectionName}")]
+    public ActionResult<string?> GetPage(int bookId, string sectionName) => 
+        _epubReaderService.GetHtmlPage(bookId, sectionName);
 }

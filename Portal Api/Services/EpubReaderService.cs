@@ -6,34 +6,41 @@ using AngleSharp.Html.Dom;
 /// <summary>
 /// Service wrapper to parse epub files
 /// </summary>
-public static class EpubReaderService
+public class EpubReaderService
 {
     /// <summary>
     /// The parsed epub file
     /// </summary>
-    private static EpubBook Ebook { get; set; }
+    private EpubBook Ebook { get; set; }
 
     /// <summary>
-    /// Parses an epub file and stores it in a EpubBook object
+    /// Fetches the the ebook from the database and stores it in a EpubBook object
     /// </summary>
-    /// <param name="filePath"></param>
-    public static void OpenEBook(string filePath) {
+    /// <param name="bookId">The book identifier</param>
+    private void OpenEBook(int bookId) {
+        string filePath = "";
         Ebook = EpubReader.Read(filePath);
     }
 
     /// <summary>
     /// Gets the parsed epub's title
     /// </summary>
+    /// <param name="bookId">The book identifier</param>
     /// <returns>The parsed epub's title</returns>
-    public static string GetTitle() {
+    public string GetTitle(int bookId) {
+        OpenEBook(bookId);
+
         return Ebook.Title;
     }
 
     /// <summary>
     /// Gets the parsed epub's author(s)
     /// </summary>
+    /// <param name="bookId">The book identifier</param>
     /// <returns>The parsed epub's author(s)</returns>
-    public static string GetAuthors() {
+    public string GetAuthors(int bookId) {
+        OpenEBook(bookId);
+
         List<string> authors = Ebook.Authors.ToList();
         return authors.Count == 1 ? authors[0] : String.Join(", ", authors);
     }
@@ -42,8 +49,11 @@ public static class EpubReaderService
     /// Gets the table of contents for the epub and removes
     /// unneeded info from the anchor elements
     /// </summary>
+    /// <param name="bookId">The book identifier</param>
     /// <returns>A string containing multiple anchor elements</returns>
-    public static string GetTableOfContents() {
+    public string GetTableOfContents(int bookId) {
+        OpenEBook(bookId);
+
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);
 
@@ -63,9 +73,12 @@ public static class EpubReaderService
     /// <summary>
     /// Gets a section of the epub
     /// </summary>
+    /// <param name="bookId">The book identifier</param>
     /// <param name="bookSection">The section of the epub to fetch, usually are chapters</param>
     /// <returns>Markdown string with the html body contents</returns>
-    public static string? GetHtmlPage(string bookSection) {
+    public string? GetHtmlPage(int bookId, string bookSection) {
+        OpenEBook(bookId);
+
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);
 
