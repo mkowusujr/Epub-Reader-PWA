@@ -17,20 +17,23 @@ public class EpubReaderService : IEpubReaderService
     /// Fetches the the ebook from the database and stores it in a EpubBook object
     /// </summary>
     /// <param name="bookId">The book identifier</param>
-    private void OpenEBook(int bookId) {
+    private void OpenEBook(int bookId)
+    {
         string filePath = "";
         Ebook = EpubReader.Read(filePath);
     }
 
     /// <inheritdoc/>
-    public string GetTitle(int bookId) {
+    public string GetTitle(int bookId)
+    {
         OpenEBook(bookId);
 
         return Ebook.Title;
     }
 
     /// <inheritdoc/>
-    public string GetAuthors(int bookId) {
+    public string GetAuthors(int bookId)
+    {
         OpenEBook(bookId);
 
         List<string> authors = Ebook.Authors.ToList();
@@ -38,27 +41,30 @@ public class EpubReaderService : IEpubReaderService
     }
 
     /// <inheritdoc/>
-    public string GetTableOfContents(int bookId) {
+    public string GetTableOfContents(int bookId)
+    {
         OpenEBook(bookId);
 
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);
 
-        using var parsedDom = context.OpenAsync(req => req.Content(Ebook.Resources.Html.ElementAt(0).TextContent)).Result;
+        using var parsedDom = context.OpenAsync(req => req.Content(Ebook.Resources.Html.ElementAt(0).TextContent))
+            .Result;
 
         var anchorElements = parsedDom.QuerySelectorAll("a")
-                            .OfType<IHtmlAnchorElement>()
-                            .UpdateDomElements(a => a.Href = a.Href.Split('#').Last())
-                            .UpdateDomElements(a => a.ClassName = null)
-                            .Select(a => a.ToHtml())
-                            .ToList();
+            .OfType<IHtmlAnchorElement>()
+            .UpdateDomElements(a => a.Href = a.Href.Split('#').Last())
+            .UpdateDomElements(a => a.ClassName = null)
+            .Select(a => a.ToHtml())
+            .ToList();
 
-        string CleanedTableOfContents = String.Join("\n", anchorElements);
-        return CleanedTableOfContents;
+        var cleanedTableOfContents = String.Join("\n", anchorElements);
+        return cleanedTableOfContents;
     }
 
     /// <inheritdoc/>
-    public string? GetHtmlPage(int bookId, string bookSection) {
+    public string? GetHtmlPage(int bookId, string bookSection)
+    {
         OpenEBook(bookId);
 
         var config = Configuration.Default;
@@ -72,4 +78,4 @@ public class EpubReaderService : IEpubReaderService
 
         return foundPage;
     }
-
+}
