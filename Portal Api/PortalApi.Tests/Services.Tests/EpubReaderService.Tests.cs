@@ -4,7 +4,7 @@ using EReaderSharp.Data;
 public class EReaderSharpServiceTests
 {
     const string TestEpubFile = @"C:\Users\mokay\Local-Repositories\Epub-Reader-PWA\Practice\Blazor\TodoList\Data\frankenstien.epub";
-
+var path = Path.Combine(Directory.GetCurrentDirectory(), "\\frankenstien.epub");
     [Fact]
     public void TestGetTitle()
     {
