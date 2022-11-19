@@ -1,52 +1,77 @@
-namespace EReaderSharp.Tests.Data.Tests;
-using EReaderSharp.Data;
+using EpubSharp;
+using FluentAssertions;
+using Portal_Api.Services;
+
+namespace PortalApi.Tests.Services.Tests;
 
 public class EReaderSharpServiceTests
 {
-    const string TestEpubFile = @"C:\Users\mokay\Local-Repositories\Epub-Reader-PWA\Practice\Blazor\TodoList\Data\frankenstien.epub";
-var path = Path.Combine(Directory.GetCurrentDirectory(), "\\frankenstien.epub");
+    private readonly string resourcesDirectory =
+        Path.Combine(Directory.GetCurrentDirectory(), @"Services.Tests\Resources\");
+
+    private readonly EpubReaderService _epubReaderService = new();
+    private EpubBook eBook;
+
     [Fact]
     public void TestGetTitle()
     {
-        EpubReaderService.OpenEBook(TestEpubFile);
-        string expectedTitle = "Frankenstein; Or, The Modern Prometheus";
-        Assert.Equal(expectedTitle, EpubReaderService.GetTitle());
+        string testEpubFilePath = Path.Combine(resourcesDirectory, "frankenstien.epub");
+        eBook = _epubReaderService.ParsedEpubFile(testEpubFilePath);
+
+        const string expectedTitle = "Frankenstein; Or, The Modern Prometheus";
+
+        _epubReaderService.GetTitle(eBook)?.Should().Be(expectedTitle);
     }
 
     [Fact]
     public void TestGetAuthors()
     {
-        EpubReaderService.OpenEBook(TestEpubFile);
-        string expectedAuthors = "Mary Wollstonecraft Shelley";
-        Assert.Equal(expectedAuthors, EpubReaderService.GetAuthors());
+        string testEpubFilePath = Path.Combine(resourcesDirectory, "frankenstien.epub");
+        eBook = _epubReaderService.ParsedEpubFile(testEpubFilePath);
+
+        const string expectedAuthors = "Mary Wollstonecraft Shelley";
+
+        _epubReaderService.GetAuthors(eBook)?.Should().Be(expectedAuthors);
     }
 
     [Fact]
     public void TestTableOfContents()
     {
-        EpubReaderService.OpenEBook(TestEpubFile);
-        
-        
-        string[] ExpectedTableOfContentsOutputFile = System.IO.File.ReadAllLines(@"C:\Users\mokay\Local-Repositories\Epub-Reader-PWA\Epub Reader Sharp\EReaderSharp\EReaderSharp.Tests\Data.Tests\ExpectedTableOfContent.txt");
-        string expectedTableOfContents = String.Join("\n", ExpectedTableOfContentsOutputFile);
-        Assert.Equal(expectedTableOfContents, EpubReaderService.GetTableOfContents());
+        string testEpubFilePath = Path.Combine(resourcesDirectory, "frankenstien.epub");
+        eBook = _epubReaderService.ParsedEpubFile(testEpubFilePath);
+
+        string expectedTableOfContentsFilePath = Path.Combine(resourcesDirectory, "ExpectedTableOfContent.txt");
+        string[] expectedTableOfContentsOutputFile = File.ReadAllLines(expectedTableOfContentsFilePath);
+
+        string expectedTableOfContents = string.Join("\n", expectedTableOfContentsOutputFile);
+
+        _epubReaderService.GetTableOfContents(eBook)?.Should().Be(expectedTableOfContents);
     }
 
     [Fact]
     public void TestGetHtmlPage()
     {
-        EpubReaderService.OpenEBook(TestEpubFile);
+        string testEpubFilePath = Path.Combine(resourcesDirectory, "frankenstien.epub");
+        eBook = _epubReaderService.ParsedEpubFile(testEpubFilePath);
 
-        string[] expectedLetter2Page = System.IO.File.ReadAllLines(@"C:\Users\mokay\Local-Repositories\Epub-Reader-PWA\Epub Reader Sharp\EReaderSharp\EReaderSharp.Tests\Data.Tests\ExpectedLetter2Page.txt");
-        string? actualLetter2Page = EpubReaderService.GetHtmlPage("letter2");
-        Assert.Equal(String.Join("\n", expectedLetter2Page), actualLetter2Page);
+        string letter2PageFilePath = Path.Combine(resourcesDirectory, "ExpectedLetter2Page.txt");
+        string chap1PageFilePath = Path.Combine(resourcesDirectory, "ExpectedChap01Page.txt");
+        string chap21PageFilePath = Path.Combine(resourcesDirectory, "ExpectedChap21Page.txt");
 
-        string[] expectedChap1Page = System.IO.File.ReadAllLines(@"C:\Users\mokay\Local-Repositories\Epub-Reader-PWA\Epub Reader Sharp\EReaderSharp\EReaderSharp.Tests\Data.Tests\ExpectedChap1Page.txt");
-        string? actualChap1Page = EpubReaderService.GetHtmlPage("chap01");
-        Assert.Equal(String.Join("\n", expectedChap1Page), actualChap1Page);
+        string[] letter2PageRawHtml = File.ReadAllLines(letter2PageFilePath);
+        string[] chap1PageRawHtml = File.ReadAllLines(chap1PageFilePath);
+        string[] chap21PageRawHtml = File.ReadAllLines(chap21PageFilePath);
 
-        string[] expectedChap21Page = System.IO.File.ReadAllLines(@"C:\Users\mokay\Local-Repositories\Epub-Reader-PWA\Epub Reader Sharp\EReaderSharp\EReaderSharp.Tests\Data.Tests\ExpectedChap21Page.txt");
-        string? actualChap21Page = EpubReaderService.GetHtmlPage("chap21");
-        Assert.Equal(String.Join("\n", expectedChap21Page), actualChap21Page);
+
+        string expectedLetter2Page = string.Join("\n", letter2PageRawHtml);
+        string expectedChap1Page = string.Join("\n", chap1PageRawHtml);
+        string expectedChap21Page = string.Join("\n", chap21PageRawHtml);
+
+        _epubReaderService.GetHtmlPage(eBook, "letter2").Should().Contain("id=\"letter2\"");
+        _epubReaderService.GetHtmlPage(eBook, "letter2").Should().Be(expectedLetter2Page);
+        _epubReaderService.GetHtmlPage(eBook, "chap01").Should().Contain("id=\"chap01\"");
+        _epubReaderService.GetHtmlPage(eBook, "chap01").Should().Be(expectedChap1Page);
+        _epubReaderService.GetHtmlPage(eBook, "chap21").Should().Contain("id=\"chap21\"");
+        _epubReaderService.GetHtmlPage(eBook, "chap21").Should().Be(expectedChap21Page);
     }
 }

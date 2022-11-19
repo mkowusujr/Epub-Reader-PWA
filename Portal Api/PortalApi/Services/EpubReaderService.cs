@@ -26,7 +26,7 @@ public class EpubReaderService : IEpubReaderService
         if (eBook != null)
         {
             List<string> authors = eBook.Authors.ToList();
-            return authors.Count == 1 ? authors[0] : String.Join(", ", authors);
+            return authors.Count == 1 ? authors[0] : string.Join(", ", authors);
         }
 
         return null;
@@ -48,7 +48,7 @@ public class EpubReaderService : IEpubReaderService
             .Select(a => a.ToHtml())
             .ToList();
 
-        var cleanedTableOfContents = String.Join("\n", anchorElements);
+        var cleanedTableOfContents = string.Join("\n", anchorElements);
         return cleanedTableOfContents;
     }
 

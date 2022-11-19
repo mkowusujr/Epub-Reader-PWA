@@ -129,6 +129,5 @@ Remember me with affection, should you never hear from me again.
 Your affectionate brother,<br>
   Robert Walton
 </p>
-</a></div><p><!--end chapter--><a id="letter2">
-</a></p><a id="letter2">
+</a></div><a id="letter2">
 </a>
