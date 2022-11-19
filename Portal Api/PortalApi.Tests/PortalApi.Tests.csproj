@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PortalApi\Portal Api.csproj" />
   </ItemGroup>
+  
   <ItemGroup> 
     <Content Include="Services.Tests\Resources\**"> 
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
