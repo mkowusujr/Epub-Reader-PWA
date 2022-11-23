@@ -14,13 +14,18 @@ public class EBookMetaDataService : IEBookMetaDataService
     public EBookMetaData AddBookMetaData(IFormFile eBookMetaFileData)
     {
         string epubStorageDirectory =
-            Path.Combine(Directory.GetCurrentDirectory(), @"Epub_Storage\\");
+            Path.Combine(Directory.GetCurrentDirectory(), @"EpubStorage\EpubFiles");
         string filePath = Path.Combine(epubStorageDirectory, eBookMetaFileData.FileName);
+
+        // eBookMetaFileData.CopyTo(new FileStream(filePath, FileMode.Create));
+        using (var stream = File.Create(filePath))
+        {
+            eBookMetaFileData.CopyTo(stream);
+        }
 
         EBookMetaData response = _context.EBookMetaData.Add(new EBookMetaData(filePath)).Entity;
         _context.SaveChanges();
 
-        eBookMetaFileData.CopyTo(new FileStream(filePath, FileMode.Create));
         return response;
     }
 

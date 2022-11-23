@@ -32,6 +32,13 @@ public interface IEpubReaderService
     public string? GetTableOfContents(EpubBook? eBook);
 
     /// <summary>
+    /// Gets the cover image of the ebook
+    /// </summary>
+    /// <param name="eBook">The e book.</param>
+    /// <returns>The image data as a byte[]</returns>
+    public byte[]? GetCoverImage(EpubBook? eBook);
+
+    /// <summary>
     /// Gets a section of the epub
     /// </summary>
     /// <param name="eBook">The e book.</param>

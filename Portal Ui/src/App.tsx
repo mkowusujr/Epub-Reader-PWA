@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import { LibraryPage } from './pages/library/components/LibraryPage';
+import { LibraryPage } from './pages/library/LibraryPage';
 import NoPage from './pages/NoPage';
 
 function App() {

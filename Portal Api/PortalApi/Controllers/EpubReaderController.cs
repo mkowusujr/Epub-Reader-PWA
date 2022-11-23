@@ -49,6 +49,15 @@ public class EpubReaderController : ControllerBase
         _epubReaderService.GetTableOfContents(GetEpubBook(bookId));
 
     /// <summary>
+    /// Gets the cover page
+    /// </summary>
+    /// <param name="bookId">The book identifier.</param>
+    /// <returns></returns>
+    [HttpGet("read-book/{bookId}/coverimage")]
+    public ActionResult<byte[]?> GetCoverImage(int bookId) => 
+        _epubReaderService.GetCoverImage(GetEpubBook(bookId));
+
+    /// <summary>
     /// Gets the page.
     /// </summary>
     /// <param name="bookId">The book identifier.</param>

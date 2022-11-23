@@ -53,6 +53,12 @@ public class EpubReaderService : IEpubReaderService
     }
 
     /// <inheritdoc/>
+    public byte[]? GetCoverImage(EpubBook? eBook)
+    {
+        return eBook?.CoverImage;
+    }
+
+    /// <inheritdoc/>
     public string? GetHtmlPage(EpubBook? eBook, string bookSection)
     {
         var config = Configuration.Default;
