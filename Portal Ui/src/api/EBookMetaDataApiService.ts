@@ -6,11 +6,7 @@ const baseUrl = 'https://localhost:7042/ebookmetadata';
 /** Adds an ebook to the user's library */
 export async function addBookMetaData(eBookFile: any) {
   try {
-    const response = await axios.post(baseUrl, eBookFile, {
-      headers: {
-        'content-type': 'application / epub + zip'
-      }
-    });
+    const response = await axios.post(baseUrl, eBookFile);
     return response.data;
   } catch (error) {
     return error;

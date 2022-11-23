@@ -26,11 +26,15 @@ public class EBookMetaDataController : ControllerBase
     /// <summary>
     /// Adds the book meta data.
     /// </summary>
-    /// <param name="eBookMetaData">The e book meta data.</param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult<EBookMetaData> AddBookMetaData(IFormFile eBookMetaData) =>
-        _eBookMetaDataService.AddBookMetaData(eBookMetaData);
+    public ActionResult<EBookMetaData> AddBookMetaData() {
+        IFormFile? eBookMetaData = Request.Form.Files.FirstOrDefault();
+        if (eBookMetaData != null){
+            return _eBookMetaDataService.AddBookMetaData(eBookMetaData);
+        }
+        return null;
+    }
 
     /// <summary>
     /// Gets the e book meta data.

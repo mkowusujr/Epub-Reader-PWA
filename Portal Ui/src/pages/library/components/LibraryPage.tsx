@@ -20,8 +20,7 @@ function AddEBookComponent() {
     const formData = new FormData();
     formData.append('File', selectedFile);
 
-    // addBookMetaData(formData)
-    addBookMetaData(selectedFile)
+    addBookMetaData(formData)
       .then(response => console.log(JSON.stringify(response)))
       .catch(error => console.error(error));
   };
@@ -64,7 +63,7 @@ function ShelveComponent() {
       <h1>EBook Library</h1>
       <ul>
         {eBooks.map(eBook => (
-          <li>{eBook.id}</li>
+          <li key={eBook.id}>{eBook.id}</li>
         ))}
       </ul>
     </div>

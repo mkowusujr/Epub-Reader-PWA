@@ -14,7 +14,7 @@ public class EBookMetaDataService : IEBookMetaDataService
     public EBookMetaData AddBookMetaData(IFormFile eBookMetaFileData)
     {
         string epubStorageDirectory =
-            Path.Combine(Directory.GetCurrentDirectory(), "Epub_Storage/");
+            Path.Combine(Directory.GetCurrentDirectory(), @"Epub_Storage\\");
         string filePath = Path.Combine(epubStorageDirectory, eBookMetaFileData.FileName);
 
         EBookMetaData response = _context.EBookMetaData.Add(new EBookMetaData(filePath)).Entity;
