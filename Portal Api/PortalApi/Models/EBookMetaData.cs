@@ -10,4 +10,6 @@ public class EBookMetaData
     public string FilePath { get; set; }
 
     public bool IsMarkAsFavorite { get; set; }
+
+    public EBookMetaData(string filePath) => FilePath = filePath;
 }

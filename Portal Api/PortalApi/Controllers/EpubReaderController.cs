@@ -35,7 +35,7 @@ public class EpubReaderController : ControllerBase
     /// </summary>
     /// <param name="bookId">The book identifier.</param>
     /// <returns></returns>
-    [HttpGet("read-book/{id}/authors")]
+    [HttpGet("read-book/{bookId}/authors")]
     public ActionResult<string?> GetAuthors(int bookId) =>
         _epubReaderService.GetAuthors(GetEpubBook(bookId));
 
@@ -44,7 +44,7 @@ public class EpubReaderController : ControllerBase
     /// </summary>
     /// <param name="bookId">The book identifier.</param>
     /// <returns></returns>
-    [HttpGet("read-book/{id}/tableofcontents")]
+    [HttpGet("read-book/{bookId}/tableofcontents")]
     public ActionResult<string?> GetTableOfContents(int bookId) =>
         _epubReaderService.GetTableOfContents(GetEpubBook(bookId));
 
@@ -54,7 +54,7 @@ public class EpubReaderController : ControllerBase
     /// <param name="bookId">The book identifier.</param>
     /// <param name="sectionName">Name of the section.</param>
     /// <returns></returns>
-    [HttpGet("read-book/{id}/sections/{sectionName}")]
+    [HttpGet("read-book/{bookId}/sections/{sectionName}")]
     public ActionResult<string?> GetPage(int bookId, string sectionName) =>
         _epubReaderService.GetHtmlPage(GetEpubBook(bookId), sectionName);
 

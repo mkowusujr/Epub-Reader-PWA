@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
+import { LibraryPage } from './pages/library/components/LibraryPage';
 import NoPage from './pages/NoPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<NoPage />} />
-        <Route index element={<NoPage />} />
+        <Route index element={<LibraryPage />} />
         <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>

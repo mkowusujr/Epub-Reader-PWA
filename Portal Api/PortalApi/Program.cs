@@ -3,6 +3,7 @@ using Portal_Api.Models;
 using Portal_Api.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Cors;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,6 +12,8 @@ builder.Services.AddScoped<IEBookMetaDataService, EBookMetaDataService>();
 builder.Services.AddScoped<IEpubReaderService, EpubReaderService>();
 
 builder.Services.AddControllers();
+builder.Services.AddCors();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,5 +33,9 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors(
+    options => options.WithOrigins("http://127.0.0.1:5173").AllowAnyMethod().AllowAnyHeader()
+);
 
 app.Run();

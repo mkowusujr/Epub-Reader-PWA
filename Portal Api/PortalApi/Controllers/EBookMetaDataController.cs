@@ -8,14 +8,19 @@ namespace Portal_Api.Controllers;
 public class EBookMetaDataController : ControllerBase
 {
     private readonly IEBookMetaDataService _eBookMetaDataService;
+    private readonly ILogger<EBookMetaDataController> _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EBookMetaDataController"/> class.
     /// </summary>
     /// <param name="eBookMetaDataService">The e book meta data service.</param>
-    public EBookMetaDataController(IEBookMetaDataService eBookMetaDataService)
+    public EBookMetaDataController(
+        IEBookMetaDataService eBookMetaDataService,
+        ILogger<EBookMetaDataController> logger
+    )
     {
         _eBookMetaDataService = eBookMetaDataService;
+        _logger = logger;
     }
 
     /// <summary>
@@ -24,7 +29,7 @@ public class EBookMetaDataController : ControllerBase
     /// <param name="eBookMetaData">The e book meta data.</param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult<EBookMetaData> AddBookMetaData(EBookMetaData eBookMetaData) =>
+    public ActionResult<EBookMetaData> AddBookMetaData(IFormFile eBookMetaData) =>
         _eBookMetaDataService.AddBookMetaData(eBookMetaData);
 
     /// <summary>

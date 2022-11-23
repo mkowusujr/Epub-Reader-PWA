@@ -6,9 +6,9 @@ public interface IEBookMetaDataService
     /// <summary>
     /// Adds the book meta data.
     /// </summary>
-    /// <param name="eBookMetaData">The e book meta data.</param>
+    /// <param name="eBookMetaFileData">The e book meta file data.</param>
     /// <returns></returns>
-    public EBookMetaData AddBookMetaData(EBookMetaData eBookMetaData);
+    public EBookMetaData AddBookMetaData(IFormFile eBookMetaFileData);
 
     /// <summary>
     /// Gets the e book meta data.

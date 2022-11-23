@@ -11,11 +11,17 @@ public class EBookMetaDataService : IEBookMetaDataService
     }
 
     /// <inheritdoc/>
-    public EBookMetaData AddBookMetaData(EBookMetaData eBookMetaData)
+    public EBookMetaData AddBookMetaData(IFormFile eBookMetaFileData)
     {
-        _context.EBookMetaData.Add(eBookMetaData);
+        string epubStorageDirectory =
+            Path.Combine(Directory.GetCurrentDirectory(), "Epub_Storage/");
+        string filePath = Path.Combine(epubStorageDirectory, eBookMetaFileData.FileName);
+
+        EBookMetaData response = _context.EBookMetaData.Add(new EBookMetaData(filePath)).Entity;
         _context.SaveChanges();
-        return eBookMetaData;
+
+        eBookMetaFileData.CopyTo(new FileStream(filePath, FileMode.Create));
+        return response;
     }
 
     /// <inheritdoc/>
