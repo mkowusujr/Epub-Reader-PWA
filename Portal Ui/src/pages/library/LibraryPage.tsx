@@ -5,10 +5,10 @@ import './LibraryPage.scss';
 /** The Library Page */
 export function LibraryPage() {
   return (
-    <>
+    <div className='library-page'>
       <AddEBookComponent />
       <ShelveComponent />
-    </>
+    </div>
   );
 }
 

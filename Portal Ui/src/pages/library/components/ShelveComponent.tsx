@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getEBookMetaDataList } from '../../../api/EBookMetaDataApiService';
 import { IEBookMetaData } from '../../../models/EBookMetaData';
 import { EBookComponent } from './EBookComponent';
+import './ShelveComponent.scss';
 
 /** The Compnent for displaying the ebooks */
 export function ShelveComponent() {
@@ -19,9 +20,9 @@ export function ShelveComponent() {
   }, []);
 
   return (
-    <div>
+    <div >
       <h1>EBook Library</h1>
-      <ul>
+      <ul className='shelve-items'>
         {eBooks.map(eBook => (
           <li key={eBook.id}>
             <EBookComponent eBook={eBook} />
