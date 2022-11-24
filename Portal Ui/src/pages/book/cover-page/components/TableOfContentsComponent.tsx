@@ -23,10 +23,10 @@ export function TableOfContentsComponent(props: any) {
 
   return (
     <div>
-      {tableOfContents?.map(chapter => (
+      {tableOfContents?.map((chapter) => (
         <div>
           <Link to={`chapter-id/${chapter.anchor}`}>
-            <li>{chapter.title}</li>
+            <li key={chapter.anchor}>{chapter.title}</li>
           </Link>
         </div>
       ))}

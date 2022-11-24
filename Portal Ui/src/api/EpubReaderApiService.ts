@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { IChapterMetaData } from '../models/IChapterMetaData';
 
 const baseUrl = 'https://localhost:7042/epubreader';
 
@@ -23,7 +24,7 @@ export async function getAuthors(bookId: number) {
 }
 
 /** Gets the table of contents of the ebook */
-export async function getTableOfContents(bookId: number) {
+export async function getTableOfContents(bookId: number): Promise<IChapterMetaData | any> {
   try {
     const response = await axios.get(
       `${baseUrl}/read-book/${bookId}/tableofcontents`

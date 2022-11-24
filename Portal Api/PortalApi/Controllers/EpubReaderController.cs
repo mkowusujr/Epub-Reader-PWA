@@ -61,11 +61,11 @@ public class EpubReaderController : ControllerBase
     /// Gets the page.
     /// </summary>
     /// <param name="bookId">The book identifier.</param>
-    /// <param name="sectionName">Name of the section.</param>
+    /// <param name="fileName">The filename of the page being fetched.</param>
     /// <returns></returns>
-    [HttpGet("read-book/{bookId}/sections/{sectionName}")]
-    public ActionResult<string?> GetPage(int bookId, string sectionName) =>
-        _epubReaderService.GetHtmlPage(GetEpubBook(bookId), sectionName);
+    [HttpGet("read-book/{bookId}/sections/{fileName}")]
+    public ActionResult<string?> GetPage(int bookId, string fileName) =>
+        _epubReaderService.GetHtmlPage(GetEpubBook(bookId), fileName);
 
     /// <summary>
     /// Gets the epub book.

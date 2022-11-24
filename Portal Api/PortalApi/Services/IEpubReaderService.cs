@@ -42,7 +42,7 @@ public interface IEpubReaderService
     /// Gets a section of the epub
     /// </summary>
     /// <param name="eBook">The e book.</param>
-    /// <param name="bookSection">The section of the epub to fetch, usually are chapters</param>
+    /// <param name="fileName">The filename of the page being fetched</param>
     /// <returns>Markdown string with the html body contents</returns>
-    public string? GetHtmlPage(EpubBook? eBook, string bookSection);
+    public string? GetHtmlPage(EpubBook? eBook, string fileName);
 }

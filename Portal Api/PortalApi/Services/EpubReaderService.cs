@@ -1,7 +1,6 @@
 ﻿namespace Portal_Api.Services;
 using EpubSharp;
 using AngleSharp;
-using AngleSharp.Html.Dom;
 
 /// <summary>
 /// Service wrapper to parse epub files
@@ -45,17 +44,17 @@ public class EpubReaderService : IEpubReaderService
     }
 
     /// <inheritdoc/>
-    public string? GetHtmlPage(EpubBook? eBook, string bookSection)
+    public string? GetHtmlPage(EpubBook? eBook, string fileName)
     {
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);
 
-        string? foundPage = eBook?.Resources.Html
-            .Skip(1)
-            .Select(h => context.OpenAsync(req => req.Content(h.TextContent)))
-            .First(dom => dom.Result.IsCorrectPage(bookSection))
-            .Result?.Body?.InnerHtml.Trim().ToString();
+        string? foundChapterTextContent =
+            eBook?.Resources.Html.First(chapter => chapter.FileName == fileName).TextContent;
 
-        return foundPage;
+        string? parsedHtmlContent = context.OpenAsync(req => req.Content(foundChapterTextContent)).Result?.Body
+            ?.InnerHtml.Trim().ToString();
+
+        return parsedHtmlContent;
     }
 }

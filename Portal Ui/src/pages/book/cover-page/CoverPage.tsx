@@ -19,17 +19,17 @@ export function CoverPage() {
   };
 
   useEffect(() => {
-    if(ebookId){
-        fetchEBookFromApi(+ebookId);
+    if (ebookId) {
+      fetchEBookFromApi(+ebookId);
     }
   }, []);
 
   return (
     <>
       {eBook ? (
-        <div className='cover-page'>
-          <EBookCoverInfoComponent eBook={eBook}/>
-          <TableOfContentsComponent eBook={eBook}/>
+        <div className="cover-page">
+          <EBookCoverInfoComponent eBook={eBook} />
+          <TableOfContentsComponent eBook={eBook} />
         </div>
       ) : (
         <NoPage />

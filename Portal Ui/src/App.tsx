@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.scss';
+import { BookSectionPage } from './pages/book/book-section/components/BookSectionPage';
 import { CoverPage } from './pages/book/cover-page/CoverPage';
 import { LibraryPage } from './pages/library/LibraryPage';
 import NoPage from './pages/NoPage';
@@ -9,6 +10,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index element={<LibraryPage />} />
+        <Route
+          path="book-id/:ebookId/chapter-id/:chapterId"
+          element={<BookSectionPage />}
+        />
         <Route path="book-id/:ebookId" element={<CoverPage />} />
         <Route path="*" element={<NoPage />} />
       </Routes>
