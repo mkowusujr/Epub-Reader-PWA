@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.scss';
-import { BookSectionPage } from './pages/book/book-section/components/BookSectionPage';
+import { BookSectionPage } from './pages/book/book-section/BookSectionPage';
 import { CoverPage } from './pages/book/cover-page/CoverPage';
 import { LibraryPage } from './pages/library/LibraryPage';
 import NoPage from './pages/NoPage';

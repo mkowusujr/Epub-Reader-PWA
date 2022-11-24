@@ -5,8 +5,9 @@ import { useParams } from 'react-router-dom';
 import {
   getPage,
   getTableOfContents
-} from '../../../../api/EpubReaderApiService';
-import { IChapterMetaData } from '../../../../models/IChapterMetaData';
+} from '../../../api/EpubReaderApiService';
+import { IChapterMetaData } from '../../../models/IChapterMetaData';
+import './BookSection.scss';
 
 export function BookSectionPage() {
   const [bookSectionHtml, setBookSectionHtml] = useState<string | undefined>(
@@ -39,9 +40,9 @@ export function BookSectionPage() {
   }, []);
 
   return (
-    <div>
+    <div className='book-section-page'>
       {bookSectionHtml ? (
-        <div
+        <div className='page-content'
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(bookSectionHtml)
           }}
