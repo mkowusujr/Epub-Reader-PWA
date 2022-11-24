@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IEBookMetaData } from '../core/interfaces/EBookMetaData';
+import { IEBookMetaData } from '../models/EBookMetaData';
 
 const baseUrl = 'https://localhost:7042/ebookmetadata';
 

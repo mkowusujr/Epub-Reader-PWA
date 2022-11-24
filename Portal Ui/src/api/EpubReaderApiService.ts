@@ -36,7 +36,9 @@ export async function getTableOfContents(bookId: number) {
 
 export async function getCoverImage(bookId: number) {
   try {
-    const response = await axios.get(`${baseUrl}/read-book/${bookId}/coverimage`);
+    const response = await axios.get(
+      `${baseUrl}/read-book/${bookId}/coverimage`
+    );
     return response.data;
   } catch (error) {
     return error;

@@ -1,5 +1,6 @@
 import { AddEBookComponent } from './components/AddEBookComponent';
 import { ShelveComponent } from './components/ShelveComponent';
+import './LibraryPage.scss';
 
 /** The Library Page */
 export function LibraryPage() {
