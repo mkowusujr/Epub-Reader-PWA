@@ -1,0 +1,12 @@
+@import '../../../styles/common.scss';
+
+.cover-page {
+    @include DefaultSpacings();
+    display: flex;
+    justify-content: space-around;
+}
+
+.cover-page img {
+    width: 20em;
+    height: 25em;
+}
