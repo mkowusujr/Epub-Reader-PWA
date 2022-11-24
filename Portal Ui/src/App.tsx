@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route index element={<LibraryPage />} />
-        <Route path="book/:ebookId" element={<CoverPage />} />
+        <Route path="book-id/:ebookId" element={<CoverPage />} />
         <Route path="*" element={<NoPage />} />
       </Routes>
     </BrowserRouter>

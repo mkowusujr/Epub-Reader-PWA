@@ -6,7 +6,7 @@ export function EBookComponent(props: any) {
   let eBook = props.eBook;
 
   return (
-    <Link to={`/book/${eBook.id}`} className="ebook-component">
+    <Link to={`/book-id/${eBook.id}`} className="ebook-component">
       <img
         src={`data:image/jpeg;base64,${eBook.coverImage}`}
         alt="Book Cover"

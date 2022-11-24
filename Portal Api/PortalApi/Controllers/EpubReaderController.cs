@@ -45,7 +45,7 @@ public class EpubReaderController : ControllerBase
     /// <param name="bookId">The book identifier.</param>
     /// <returns></returns>
     [HttpGet("read-book/{bookId}/tableofcontents")]
-    public ActionResult<string?> GetTableOfContents(int bookId) =>
+    public ActionResult<List<EpubChapter>?> GetTableOfContents(int bookId) =>
         _epubReaderService.GetTableOfContents(GetEpubBook(bookId));
 
     /// <summary>

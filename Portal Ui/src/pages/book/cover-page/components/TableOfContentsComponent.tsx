@@ -1,13 +1,13 @@
-import DOMPurify from 'isomorphic-dompurify';
-
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getTableOfContents } from '../../../../api/EpubReaderApiService';
+import { IChapterMetaData } from '../../../../models/IChapterMetaData';
 
 /** */
 export function TableOfContentsComponent(props: any) {
-  const [tableOfContents, setTableOfContents] = useState<string | undefined>(
-    undefined
-  );
+  const [tableOfContents, setTableOfContents] = useState<
+    IChapterMetaData[] | undefined
+  >(undefined);
 
   const fetchTableOfContents = (ebookId: number) => {
     getTableOfContents(ebookId)
@@ -21,14 +21,15 @@ export function TableOfContentsComponent(props: any) {
     fetchTableOfContents(props.eBook.id);
   }, []);
 
-  let cleanTableOfContentsHtml = DOMPurify.sanitize(
-    tableOfContents ?? 'error',
-    { USE_PROFILES: { html: true } }
-  );
-
   return (
     <div>
-      {<div dangerouslySetInnerHTML={{ __html: tableOfContents ?? "" }} />}
+      {tableOfContents?.map(chapter => (
+        <div>
+          <Link to={`chapter-id/${chapter.anchor}`}>
+            <li>{chapter.title}</li>
+          </Link>
+        </div>
+      ))}
     </div>
   );
 }

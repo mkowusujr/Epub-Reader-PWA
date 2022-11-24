@@ -33,23 +33,9 @@ public class EpubReaderService : IEpubReaderService
     }
 
     /// <inheritdoc/>
-    public string? GetTableOfContents(EpubBook? eBook)
+    public List<EpubChapter>? GetTableOfContents(EpubBook? eBook)
     {
-        var config = Configuration.Default;
-        using var context = BrowsingContext.New(config);
-
-        using var parsedDom = context.OpenAsync(req => req.Content(eBook?.Resources.Html.ElementAt(0).TextContent))
-            .Result;
-
-        var anchorElements = parsedDom.QuerySelectorAll("a")
-            .OfType<IHtmlAnchorElement>()
-            .UpdateDomElements(a => a.Href = a.Href.Split('#').Last())
-            .UpdateDomElements(a => a.ClassName = null)
-            .Select(a => a.ToHtml())
-            .ToList();
-
-        var cleanedTableOfContents = string.Join("\n", anchorElements);
-        return cleanedTableOfContents;
+        return eBook?.TableOfContents;
     }
 
     /// <inheritdoc/>

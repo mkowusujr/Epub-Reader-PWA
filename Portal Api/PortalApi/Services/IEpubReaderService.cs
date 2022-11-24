@@ -29,7 +29,7 @@ public interface IEpubReaderService
     /// </summary>
     /// <param name="eBook">The e book.</param>
     /// <returns>A string containing multiple anchor elements</returns>
-    public string? GetTableOfContents(EpubBook? eBook);
+    public List<EpubChapter>? GetTableOfContents(EpubBook? eBook);
 
     /// <summary>
     /// Gets the cover image of the ebook
