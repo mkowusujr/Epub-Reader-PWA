@@ -4,6 +4,8 @@ import './LibraryPage.scss';
 
 /** The Library Page */
 export function LibraryPage() {
+  document.title = "Portal EReader - Library";
+
   return (
     <div className='library-page'>
       <AddEBookComponent />

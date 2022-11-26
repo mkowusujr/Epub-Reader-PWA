@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { addBookMetaData } from '../../../api/EBookMetaDataApiService';
+import './AddEBookComponent.scss';
 
 /** Adds ebooks to the local library */
 export function AddEBookComponent() {
@@ -25,20 +26,22 @@ export function AddEBookComponent() {
   };
 
   return (
-    <div>
-      <input type="file" name="file" onChange={onFileChange} />
-      {isFilePicked ? (
-        <div>
-          <p>File name: {selectedFile?.name}</p>
-          <p>File type: {selectedFile?.type}</p>
-          <p>File size: {selectedFile?.size}</p>
-        </div>
-      ) : (
-        <p>Select a file to show details</p>
-      )}
+    <>
+      <div className="upload-component">
+        <input type="file" name="file" onChange={onFileChange} placeholder="Upload an Epub file"/>
+        {isFilePicked ? (
+          <div>
+            <p>File name: {selectedFile?.name}</p>
+            <p>File type: {selectedFile?.type}</p>
+            <p>File size: {selectedFile?.size}</p>
+          </div>
+        ) : (
+          <p>Select a file to show details</p>
+        )}
+      </div>
       <button onClick={uploadFileToApi} disabled={!isFilePicked}>
         Submit
       </button>
-    </div>
+    </>
   );
 }

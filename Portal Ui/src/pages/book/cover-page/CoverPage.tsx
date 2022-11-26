@@ -21,6 +21,7 @@ export function CoverPage() {
   useEffect(() => {
     if (ebookId) {
       fetchEBookFromApi(+ebookId);
+      document.title = eBook?.title ?? "Cover Page";
     }
   }, []);
 
