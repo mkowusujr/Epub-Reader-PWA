@@ -14,15 +14,15 @@ public class EBookMetaData
 
     public byte[] CoverImage { get; set; }
 
-    public string FilePath { get; set; }
+    public string FileName { get; set; }
 
     public bool IsMarkAsFavorite { get; set; }
 
-    public EBookMetaData(string filePath) {
-        FilePath = filePath;
+    public EBookMetaData(string fileName) {
+        FileName = fileName;
 
         EpubReaderService epubReaderService = new EpubReaderService();
-        EpubBook parsedEBook = epubReaderService.ParsedEpubFile(FilePath);
+        EpubBook parsedEBook = epubReaderService.ParsedEpubFile(FileName);
 
         Title = epubReaderService.GetTitle(parsedEBook);
         Author = epubReaderService.GetAuthors(parsedEBook);

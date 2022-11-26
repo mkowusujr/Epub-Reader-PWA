@@ -77,7 +77,7 @@ public class EpubReaderController : ControllerBase
         var eBookMetaData = _ebookMetaDataService.GetEBookMetaData(bookId);
         if (eBookMetaData != null)
         {
-            return _epubReaderService.ParsedEpubFile(eBookMetaData.FilePath);
+            return _epubReaderService.ParsedEpubFile(eBookMetaData.FileName);
         }
 
         return null;

@@ -22,7 +22,7 @@ public class EBookMetaDataService : IEBookMetaDataService
             eBookMetaFileData.CopyTo(stream);
         }
 
-        EBookMetaData response = _context.EBookMetaData.Add(new EBookMetaData(filePath)).Entity;
+        EBookMetaData response = _context.EBookMetaData.Add(new EBookMetaData(eBookMetaFileData.FileName)).Entity;
         _context.SaveChanges();
 
         return response;
@@ -32,9 +32,11 @@ public class EBookMetaDataService : IEBookMetaDataService
     public bool DeleteEBookMetaData(int bookId)
     {
         var eBookMetaData = _context.EBookMetaData.FirstOrDefault(e => e.Id == bookId);
+        string filePath = Path.Combine(EpubStorageDirectory, eBookMetaData.FileName);
+
         if (eBookMetaData != null)
         {
-            DeleteEpubFile(eBookMetaData.FilePath);
+            DeleteEpubFile(filePath);
             _context.Remove(eBookMetaData);
             _context.SaveChanges();
             return true;

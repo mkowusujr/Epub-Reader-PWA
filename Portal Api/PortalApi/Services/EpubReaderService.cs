@@ -10,7 +10,9 @@ public class EpubReaderService : IEpubReaderService
     /// <inheritdoc/>
     public EpubBook ParsedEpubFile(string filename)
     {
-        return EpubReader.Read(filename);
+        string epubStorageDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"EpubStorage\EpubFiles");
+        string filePath = Path.Combine(epubStorageDirectory, filename);
+        return EpubReader.Read(filePath);
     }
 
     /// <inheritdoc/>
