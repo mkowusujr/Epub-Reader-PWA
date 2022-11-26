@@ -1,0 +1,19 @@
+@import '../../../styles/common.scss';
+
+.delete-button {
+    display: block;
+    background-color: red;
+    color: white;
+    font-size: x-small;
+    border-radius: 2em;
+    width: 2em;
+    height: 2em;
+    overflow: hidden;
+    margin: 1em;
+    padding: 0.25em;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    @include DropShadow();
+}
