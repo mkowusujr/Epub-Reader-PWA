@@ -28,7 +28,13 @@ export function AddEBookComponent(props: any) {
   return (
     <>
       <div className="upload-component">
-        <input type="file" name="file" onChange={onFileChange} placeholder="Upload an Epub file"/>
+        <input
+          type="file"
+          name="file"
+          onChange={onFileChange}
+          placeholder="Upload an Epub file"
+          accept="application/epub+zip"
+        />
         {isFilePicked ? (
           <div>
             <p>File name: {selectedFile?.name}</p>
