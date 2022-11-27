@@ -1,4 +1,3 @@
-import { AddEBookComponent } from './components/AddEBookComponent';
 import { ShelveComponent } from './components/ShelveComponent';
 import './LibraryPage.scss';
 
@@ -8,7 +7,6 @@ export function LibraryPage() {
 
   return (
     <div className='library-page'>
-      <AddEBookComponent />
       <ShelveComponent />
     </div>
   );

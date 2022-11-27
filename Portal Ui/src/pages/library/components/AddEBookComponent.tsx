@@ -3,7 +3,7 @@ import { addBookMetaData } from '../../../api/EBookMetaDataApiService';
 import './AddEBookComponent.scss';
 
 /** Adds ebooks to the local library */
-export function AddEBookComponent() {
+export function AddEBookComponent(props: any) {
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [isFilePicked, setIsFilePicked] = useState(false);
 
@@ -21,7 +21,7 @@ export function AddEBookComponent() {
     formData.append('File', selectedFile);
 
     addBookMetaData(formData)
-      // .then(response => console.log(JSON.stringify(response)))
+      .then(response => props.updateShelve())
       .catch(error => console.error(error));
   };
 

@@ -5,7 +5,9 @@ import './DeleteEBookButtonComponent.scss';
 export function DeleteEBookButtonComponent(props: any) {
   const eBook: IEBookMetaData = props.eBook;
   const deleteEBook = (eBookId: number) => {
-    DeleteEBookMetaData(eBookId).catch(error => console.error(error));
+    DeleteEBookMetaData(eBookId)
+    .then(() => props.updateShelve())
+    .catch(error => console.error(error));
   };
 
   return (
