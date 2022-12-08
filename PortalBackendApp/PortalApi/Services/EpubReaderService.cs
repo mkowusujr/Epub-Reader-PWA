@@ -56,7 +56,7 @@ public class EpubReaderService : IEpubReaderService
 
         string? parsedHtmlContent = context.OpenAsync(req => req.Content(foundChapterTextContent)).Result?.Body
             ?.InnerHtml.Trim().ToString();
-
+        
         return parsedHtmlContent;
     }
 }

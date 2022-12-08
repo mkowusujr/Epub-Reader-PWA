@@ -2,10 +2,17 @@
 
 .book-section-page {
     @include DefaultSpacings();
-    color: white;
+    color: black;
     display: flex;
     flex-direction: column;
     margin-top: 1.5em;
+    background-color: white;
+    padding: 2em;
+    margin: auto;
+    width: 60%;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-radius: 0.5em;
 }
 
 .page-content {

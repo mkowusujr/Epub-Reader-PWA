@@ -2,11 +2,40 @@
 
 .cover-page {
     @include DefaultSpacings();
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    gap: 2em;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    color: black;
+    background-color: white;
+    padding: 2em;
+    border-radius: 0.5em;
+    width: 100%;
+    // border: 25px;
+    // border-color: black;
 }
 
 .cover-page img {
     width: 20em;
     height: 25em;
+    margin-bottom: 2em;
+}
+
+.cover-page-info {
+    h1 {
+        font-size: x-large;
+    }
+    h2 {
+        font-size: large;
+        color: rgb(142, 138, 138);
+    }
+}
+
+.table-of-contents {
+    background-color: rgb(241, 241, 241);
+    padding: 2em;
+    border-radius: 0.5em;
+    line-height: 2em;
+    h1 {
+        font-size: xx-large;
+    }
 }

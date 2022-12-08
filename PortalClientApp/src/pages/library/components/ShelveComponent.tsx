@@ -22,7 +22,7 @@ export function ShelveComponent() {
 
   return (
     <div>
-      <h1>EBook Library</h1>
+      {/* <h1>EBook Library</h1> */}
       <ul className="shelve-items">
         <li>
           <AddEBookComponent updateShelve={fetchEBooksFromApi} />

@@ -8,7 +8,7 @@ export function EBookComponent(props: any) {
 
   return (
     <div className="ebook-component">
-      <DeleteEBookButtonComponent eBook={eBook} updateShelve={props.updateShelve} />
+      {/* <DeleteEBookButtonComponent eBook={eBook} updateShelve={props.updateShelve} /> */}
       <Link to={`/book-id/${eBook.id}`} className="ebook-component">
         <img
           src={`data:image/jpeg;base64,${eBook.coverImage}`}

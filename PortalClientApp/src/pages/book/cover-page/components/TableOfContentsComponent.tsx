@@ -22,7 +22,8 @@ export function TableOfContentsComponent(props: any) {
   }, []);
 
   return (
-    <div>
+    <div className='table-of-contents'>
+      <h1>Table of Contents</h1>
       {tableOfContents?.map((chapter) => (
         <div>
           <Link to={`chapter-id/${chapter.anchor}`}>

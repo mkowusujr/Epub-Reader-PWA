@@ -1,0 +1,24 @@
+@import '../../../styles/common.scss';
+
+nav {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 0.45em;
+    width: 10em;
+    min-height: 100vh;
+    font-size: large;
+    @include DropShadow();
+    &:last-child {
+        margin-top: auto;
+    }
+}
+
+nav a {
+    display: block;
+    padding: 1em;
+    &:hover {
+        background-color: rgb(243, 240, 255);
+        border-radius: 0.75em;
+    }
+}

@@ -3,7 +3,7 @@ import './LibraryPage.scss';
 
 /** The Library Page */
 export function LibraryPage() {
-  document.title = "Portal EReader - Library";
+  document.title = "Portal | Library";
 
   return (
     <div className='library-page'>
