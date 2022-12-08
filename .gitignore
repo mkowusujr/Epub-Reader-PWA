@@ -1,10 +1,10 @@
-Portal Api/.vs
-Portal Api/PortalApi/bin
-Portal Api/PortalApi/obj
-Portal Api/PortalApi.Tests/bin
-Portal Api/PortalApi.Tests/obj
-Portal Api/PortalApi/EBookMetaData.db-wal
-Portal Api/PortalApi/EBookMetaData.db-shm
+PortalBackendApp/.vs
+PortalBackendApp/PortalApi/bin
+PortalBackendApp/PortalApi/obj
+PortalBackendApp/PortalApi.Tests/bin
+PortalBackendApp/PortalApi.Tests/obj
+PortalBackendApp/PortalApi/EBookMetaData.db-wal
+PortalBackendApp/PortalApi/EBookMetaData.db-shm
 
 # Logs
 logs
