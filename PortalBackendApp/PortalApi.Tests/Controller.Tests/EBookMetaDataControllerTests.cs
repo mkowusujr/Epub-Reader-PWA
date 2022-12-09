@@ -1,59 +1,54 @@
 using PortalApi.Controllers;
-using PortalApi.Services;
+using PortalApi.Services.Interfaces;
 using PortalApi.Models;
 
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 
 namespace PortalApi.Tests.Controller.Tests;
+
 public class EBookMetaDataControllerTests
 {
-    readonly IEBookMetaDataService eBookMetaDataService = A.Fake<IEBookMetaDataService>();
+    readonly IEBookService eBookService = A.Fake<IEBookService>();
 
-    readonly EBookMetaDataController eBookMetaDataController;
+    readonly EBookController eBookController;
 
-    public EBookMetaDataControllerTests()
-    {
-        eBookMetaDataController = new EBookMetaDataController(eBookMetaDataService);
-    }
+    public EBookMetaDataControllerTests() => eBookController = new EBookController(eBookService);
 
     [Fact]
-    void TestGetEBookMetaData()
+    void TestGetEBookForUser()
     {
-        EBookMetaData mockEBookMetaData = A.Fake<EBookMetaData>();
-        A.CallTo(() => eBookMetaDataService.GetEBookMetaData(A<int>.Ignored))
-            .Returns(mockEBookMetaData);
+        EBook mockEBook = A.Fake<EBook>();
+        A.CallTo(() => eBookService.GetEBookForUser(A<int>.Ignored, A<int>.Ignored))
+            .Returns(mockEBook);
 
-        var response = eBookMetaDataController.GetEBookMetaData(bookId: 1);
+        var response = eBookController.GetEBookForUser(userId: 1, eBookId: 1);
         var result = response.Result as OkObjectResult;
 
-        result?.Value.Should().Be(mockEBookMetaData);
+        result?.Value.Should().Be(mockEBook);
     }
 
     [Fact]
     void TestGetEBookMetaDataList()
     {
-        List<EBookMetaData> mockEBookMetaDatas = A.CollectionOfDummy<EBookMetaData>(5).ToList();
-        A.CallTo(() => eBookMetaDataService.GetEBookMetaDataList())
-            .Returns(mockEBookMetaDatas);
+        List<EBook> mockEBooks = A.CollectionOfDummy<EBook>(5).ToList();
+        A.CallTo(() => eBookService.GetEBooksForUser(A<int>.Ignored)).Returns(mockEBooks);
 
-        var response = eBookMetaDataController.GetEBookMetaDataList();
+        var response = eBookController.GetEBooksForUser(userId: 1);
         var result = response.Result as OkObjectResult;
 
-        result?.Value.Should().Be(mockEBookMetaDatas);
+        result?.Value.Should().Be(mockEBooks);
     }
 
     [Fact]
     void TestDeleteEBookMetaData()
     {
         bool expectedResult = true;
-        EBookMetaData mockEBookMetaData = A.Fake<EBookMetaData>();
-        A.CallTo(() => eBookMetaDataService.DeleteEBookMetaData(A<int>.Ignored))
-            .Returns(expectedResult);
+        EBook mockEBook = A.Fake<EBook>();
+        A.CallTo(() => eBookService.DeleteEBookForUser(A<int>.Ignored, A<int>.Ignored)).Returns(expectedResult);
 
-        var response = eBookMetaDataController.DeleteEBookMetaData(bookId: 1);
+        var response = eBookController.DeleteEBookForUser(userId: 1, eBookId: 1);
         var result = response.Result as OkObjectResult;
 
         result?.Value.Should().Be(expectedResult);
@@ -62,14 +57,13 @@ public class EBookMetaDataControllerTests
     [Fact]
     void TestAddBookMetaData()
     {
-        IFormFile mockFile = A.Fake<IFormFile>();
-        EBookMetaData mockEBookMetaData = A.Fake<EBookMetaData>();
-        A.CallTo(() => eBookMetaDataService.AddBookMetaData(A<IFormFile>.Ignored))
-            .Returns(mockEBookMetaData);
+        EBookInputModel mockEBookInputModel = A.Fake<EBookInputModel>();
+        EBook mockEBook = A.Fake<EBook>();
+        A.CallTo(() => eBookService.AddEBookForUser(A<EBookInputModel>.Ignored)).Returns(mockEBook);
 
-        var response = eBookMetaDataController.AddBookMetaData(mockFile);
+        var response = eBookController.AddBookForUser(mockEBookInputModel);
         var result = response?.Result as OkObjectResult;
 
-        result?.Value.Should().Be(mockEBookMetaData);
+        result?.Value.Should().Be(mockEBook);
     }
 }

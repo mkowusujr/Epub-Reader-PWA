@@ -1,15 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using PortalApi.Models;
 using PortalApi.Services;
+using PortalApi.Services.Interfaces;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Cors;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<EBookMetaDataDbContext>(options => options.UseSqlite("Data Source = EBookMetaData.db"));
-builder.Services.AddScoped<IEBookMetaDataService, EBookMetaDataService>();
-builder.Services.AddScoped<IEpubReaderService, EpubReaderService>();
+builder.Services.AddDbContext<PortalDbContext>(
+    options => options.UseSqlite("Data Source = Portal.db")
+);
+builder.Services.AddScoped<IEBookService, EBookService>();
+builder.Services.AddScoped<ICollectionService, CollectionService>();
+builder.Services.AddScoped<IAnnotationService, AnnotationService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers();
 builder.Services.AddCors();
@@ -34,8 +41,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors(
-    options => options.WithOrigins("*").AllowAnyMethod().AllowAnyHeader()
-);
+app.UseCors(options => options.WithOrigins("*").AllowAnyMethod().AllowAnyHeader());
 
 app.Run();

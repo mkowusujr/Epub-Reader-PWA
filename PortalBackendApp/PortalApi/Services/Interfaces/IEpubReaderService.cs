@@ -1,6 +1,10 @@
 using EpubSharp;
 
-namespace PortalApi.Services;
+namespace PortalApi.Services.Interfaces;
+
+/// <summary>
+/// 
+/// </summary>
 public interface IEpubReaderService
 {
     /// <summary>
@@ -8,7 +12,7 @@ public interface IEpubReaderService
     /// </summary>
     /// <param name="filename">The filename.</param>
     /// <returns>The e book</returns>
-    public EpubBook ParsedEpubFile(string filename);
+    public EpubBook ParsedEpubFile(IFormFile epubFIle);
 
     /// <summary>
     /// Gets the title of the epub

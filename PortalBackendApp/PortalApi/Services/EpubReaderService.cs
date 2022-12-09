@@ -1,18 +1,21 @@
 ﻿using EpubSharp;
 using AngleSharp;
+using PortalApi.Services.Interfaces;
 
 namespace PortalApi.Services;
+
 /// <summary>
 /// Service wrapper to parse epub files
 /// </summary>
 public class EpubReaderService : IEpubReaderService
 {
     /// <inheritdoc/>
-    public EpubBook ParsedEpubFile(string filename)
+    public EpubBook ParsedEpubFile(IFormFile epubFile)
     {
-        string epubStorageDirectory = Path.Combine(Directory.GetCurrentDirectory(), @"EpubStorage\EpubFiles");
-        string filePath = Path.Combine(epubStorageDirectory, filename);
-        return EpubReader.Read(filePath);
+        Stream epubStream = epubFile.OpenReadStream();
+        EpubBook parsedEpubBook = EpubReader.Read(epubStream, leaveOpen: false);
+
+        return parsedEpubBook;
     }
 
     /// <inheritdoc/>
@@ -51,12 +54,15 @@ public class EpubReaderService : IEpubReaderService
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);
 
-        string? foundChapterTextContent =
-            eBook?.Resources.Html.First(chapter => chapter.FileName == fileName).TextContent;
+        string? foundChapterTextContent = eBook?.Resources.Html
+            .First(chapter => chapter.FileName == fileName)
+            .TextContent;
 
-        string? parsedHtmlContent = context.OpenAsync(req => req.Content(foundChapterTextContent)).Result?.Body
-            ?.InnerHtml.Trim().ToString();
-        
+        string? parsedHtmlContent = context
+            .OpenAsync(req => req.Content(foundChapterTextContent))
+            .Result?.Body?.InnerHtml.Trim()
+            .ToString();
+
         return parsedHtmlContent;
     }
 }
