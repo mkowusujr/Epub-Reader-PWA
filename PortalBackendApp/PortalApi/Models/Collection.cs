@@ -4,7 +4,7 @@ public class Collection
 {
     public int CollectionId { get; set; }
 
-    public string? Name { get; set; }
+    public string Name { get; set; }
 
     #region Relationships
 
@@ -14,4 +14,16 @@ public class Collection
     public List<EBook> EBooks { get; set; }
 
     #endregion
+
+    public Collection(string name, int userId, List<EBook> eBooks)
+    {
+        Name = name;
+        UserId = userId;
+        EBooks = eBooks;
+    }
+
+    public Collection()
+    {
+        // Empty constructor used for ef core
+    }
 }

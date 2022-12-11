@@ -11,44 +11,50 @@ public class UserController : ControllerBase
     private readonly IUserService _userService;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="userService"></param>
     public UserController(IUserService userService) => _userService = userService;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult<User> AddUser(User user)
+    public async Task<ActionResult<User>> AddUserAsync(User user)
     {
         try
         {
-            return Ok(_userService.AddUser(user));
+            User createdUser = await _userService.AddUserAsync(user);
+            return CreatedAtAction(
+                nameof(GetUserAsync),
+                new { userId = createdUser.UserId },
+                createdUser
+            );
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
     [HttpGet("{userId}")]
-    public ActionResult<User> GetUser(int userId)
+    public async Task<ActionResult<User>> GetUserAsync(int userId)
     {
         try
         {
-            return Ok(_userService.GetUser(userId));
+            User? fetchedUser = await _userService.GetUserAsync(userId);
+            return fetchedUser != null ? Ok(fetchedUser) : NotFound();
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -58,15 +64,15 @@ public class UserController : ControllerBase
     /// <param name="userId"></param>
     /// <returns></returns>
     [HttpDelete("{userId}")]
-    public ActionResult<bool> DeleteUser(int userId)
+    public async Task<ActionResult<bool>> DeleteUserAsync(int userId)
     {
         try
         {
-            return Ok(_userService.DeleteUser(userId));
+            return Ok(await _userService.DeleteUserAsync(userId));
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

@@ -3,27 +3,27 @@ using PortalApi.Models;
 namespace PortalApi.Services.Interfaces;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public interface IUserService
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <returns></returns>
-    public User AddUser(User user);
+    public Task<User> AddUserAsync(User user);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public User GetUser(int userId);
+    public Task<User?> GetUserAsync(int userId);
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public bool DeleteUser(int userId);
+    public Task<bool> DeleteUserAsync(int userId);
 }

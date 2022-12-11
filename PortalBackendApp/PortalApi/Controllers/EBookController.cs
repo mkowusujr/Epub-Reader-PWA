@@ -22,15 +22,20 @@ public class EBookController : ControllerBase
     /// <param name="eBookInputModel"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult<EBook>? AddBookForUser(EBookInputModel eBookInputModel)
+    public async Task<ActionResult<EBook>?> AddBookForUser(EBookInputModel eBookInputModel)
     {
         try
         {
-            return Ok(_eBookService.AddEBookForUser(eBookInputModel));
+            EBook createdEBook = await _eBookService.AddEBookForUserAsync(eBookInputModel);
+            return CreatedAtAction(
+                nameof(GetEBookForUserAsync),
+                new { userId = createdEBook.UserId, eBookId = createdEBook.EBookId },
+                createdEBook
+            );
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -41,15 +46,16 @@ public class EBookController : ControllerBase
     /// <param name="eBookId"></param>
     /// <returns></returns>
     [HttpGet("users/user/{userId}/ebooks/ebook/{eBookId}")]
-    public ActionResult<EBook?> GetEBookForUser(int userId, int eBookId)
+    public async Task<ActionResult<EBook?>> GetEBookForUserAsync(int userId, int eBookId)
     {
         try
         {
-            return Ok(_eBookService.GetEBookForUser(userId, eBookId));
+            EBook? fetchedEBook = await _eBookService.GetEBookForUserAsync(userId, eBookId);
+            return fetchedEBook != null ? Ok(fetchedEBook) : NotFound();
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -65,9 +71,9 @@ public class EBookController : ControllerBase
         {
             return Ok(_eBookService.GetEBooksForUser(userId));
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -78,15 +84,15 @@ public class EBookController : ControllerBase
     /// <param name="eBookId"></param>
     /// <returns></returns>
     [HttpDelete("users/user/{userId}/ebooks/ebook/{eBookId}")]
-    public ActionResult<bool> DeleteEBookForUser(int userId, int eBookId)
+    public async Task<ActionResult<bool>> DeleteEBookForUserAsync(int userId, int eBookId)
     {
         try
         {
-            return Ok(_eBookService.DeleteEBookForUser(userId, eBookId));
+            return Ok(await _eBookService.DeleteEBookForUserAsync(userId, eBookId));
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

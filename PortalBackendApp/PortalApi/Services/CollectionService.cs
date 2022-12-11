@@ -10,24 +10,30 @@ public class CollectionService : ICollectionService
     public CollectionService(PortalDbContext context) => _context = context;
 
     /// <inheritdoc/>
-    public Collection AddCollection(Collection collection)
+    public async Task<Collection> AddCollectionAsync(Collection collection)
     {
         try
         {
             Collection newCollection = _context.Collections
-                .Add(new Collection { UserId = collection.UserId, Name = collection.Name })
+                .Add(
+                    new Collection(
+                        userId: collection.UserId,
+                        name: collection.Name,
+                        eBooks: collection.EBooks
+                    )
+                )
                 .Entity;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return newCollection;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new Exception(e.Message);
         }
     }
 
     /// <inheritdoc/>
-    public bool AddEBookToCollectionForUser(int userId, int ebookId, int collectionId)
+    public async Task<bool> AddEBookToCollectionForUserAsync(int userId, int ebookId, int collectionId)
     {
         try
         {
@@ -37,23 +43,31 @@ public class CollectionService : ICollectionService
             fetchedCollection.EBooks.Add(fetchedEBook);
             fetchedEBook.Collections.Add(fetchedCollection);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new Exception(e.Message);
         }
     }
 
     /// <inheritdoc/>
-    public Collection GetCollectionForUser(int userId, int collectionId)
+    public async Task<Collection> GetCollectionForUserAsync(int userId, int collectionId)
     {
         try
         {
-            Collection fetchedCollection = _context.Collections.First(
-                c => c.UserId == userId && c.CollectionId == collectionId
-            );
+            Collection? fetchedCollection = await _context.Collections.FindAsync(collectionId);
+
+            if (fetchedCollection == null)
+            {
+                throw new Exception($"Collection {collectionId} doesn't exist");
+            }
+            else if (fetchedCollection.UserId != userId)
+            {
+                throw new Exception($"User {userId} doesn't own Collection {collectionId}");
+            }
+
             return fetchedCollection;
         }
         catch
@@ -63,7 +77,7 @@ public class CollectionService : ICollectionService
     }
 
     /// <inheritdoc/>
-    public List<Collection> GetCollectionsForUser(int userId)
+    public List<Collection>? GetCollectionsForUser(int userId)
     {
         try
         {
@@ -92,7 +106,7 @@ public class CollectionService : ICollectionService
     }
 
     /// <inheritdoc/>
-    public bool RemoveEBookFromCollection(int userId, int ebookId, int collectionId)
+    public async Task<bool> RemoveEBookFromCollectionAsync(int userId, int ebookId, int collectionId)
     {
         try
         {
@@ -106,7 +120,7 @@ public class CollectionService : ICollectionService
                 fetchedEBook.Collections = fetchedEBook.Collections
                     .Where(c => c.CollectionId != collectionId)
                     .ToList();
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             else

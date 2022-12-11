@@ -12,7 +12,7 @@ public interface ICollectionService
     /// </summary>
     /// <param name="collection"></param>
     /// <returns></returns>
-    public Collection AddCollection(Collection collection);
+    public Task<Collection> AddCollectionAsync(Collection collection);
 
     /// <summary>
     /// 
@@ -20,14 +20,14 @@ public interface ICollectionService
     /// <param name="userId"></param>
     /// <param name="collectionId"></param>
     /// <returns></returns>
-    public Collection GetCollectionForUser(int userId, int collectionId);
+    public Task<Collection> GetCollectionForUserAsync(int userId, int collectionId);
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public List<Collection> GetCollectionsForUser(int userId);
+    public List<Collection>? GetCollectionsForUser(int userId);
 
     /// <summary>
     /// 
@@ -43,7 +43,7 @@ public interface ICollectionService
     /// <param name="userId"></param>
     /// <param name="ebookId"></param>
     /// <param name="collectionId"></param>
-    public bool AddEBookToCollectionForUser(int userId, int ebookId, int collectionId);
+    public Task<bool> AddEBookToCollectionForUserAsync(int userId, int ebookId, int collectionId);
 
     /// <summary>
     /// 
@@ -52,5 +52,5 @@ public interface ICollectionService
     /// <param name="eBookId"></param>
     /// <param name="collectionId"></param>
     /// <returns></returns>
-    public bool RemoveEBookFromCollection(int userId, int ebookId, int collectionId);
+    public Task<bool> RemoveEBookFromCollectionAsync(int userId, int ebookId, int collectionId);
 }

@@ -10,55 +10,57 @@ public class UserService : IUserService
     public UserService(PortalDbContext context) => _context = context;
 
     /// <inheritdoc/>
-    public User AddUser(User user)
+    public async Task<User> AddUserAsync(User user)
     {
         try
         {
-            User createUser = _context.Users
-                .Add(
-                    new User
-                    {
-                        Email = user.Email,
-                        Name = user.Name,
-                        Password = user.Password
-                    }
-                )
+            User createdUser = _context.Users
+                .Add(new User(email: user.Email, name: user.Name, password: user.Password))
                 .Entity;
-            _context.SaveChanges();
-            return createUser;
+            await _context.SaveChangesAsync();
+            return createdUser;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
-        }
-    }
-
-    /// <inheritdoc/>
-    public bool DeleteUser(int userId)
-    {
-        try
-        {
-            User fetchedUser = _context.Users.First(u => u.UserId == userId);
-            _context.Remove(fetchedUser);
-            _context.SaveChanges();
-            return true;
-        }
-        catch
-        {
-            throw new Exception();
+            throw new Exception(e.Message);
         }
     }
 
     /// <inheritdoc/>
-    public User GetUser(int userId)
+    public async Task<bool> DeleteUserAsync(int userId)
     {
         try
         {
-            return _context.Users.First(u => u.UserId == userId);
+            User? fetchedUser = await _context.Users.FindAsync(userId);
+            if (fetchedUser != null)
+            {
+                _context.Remove(fetchedUser);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            throw new Exception($"User {userId} doesn't exist");
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new Exception(e.Message);
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task<User?> GetUserAsync(int userId)
+    {
+        try
+        {
+            User? fetechedUser = await _context.Users.FindAsync(userId);
+            if (fetechedUser == null)
+            {
+                throw new Exception($"User {userId} doesn't exist");
+            }
+            return fetechedUser;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
         }
     }
 }

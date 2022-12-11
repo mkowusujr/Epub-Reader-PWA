@@ -10,21 +10,20 @@ public class AnnotationService : IAnnotationService
     public AnnotationService(PortalDbContext context) => _context = context;
 
     /// <inheritdoc/>
-    public Annotation AddAnnotation(Annotation annotation)
+    public async Task<Annotation> AddAnnotationAsync(Annotation annotation)
     {
         try
         {
             Annotation createdAnnotation = _context.Annotations
                 .Add(
-                    new Annotation
-                    {
-                        UserId = annotation.UserId,
-                        EBookId = annotation.EBookId,
-                        Comment = annotation.Comment
-                    }
+                    new Annotation(
+                        userId: annotation.UserId,
+                        eBookId: annotation.EBookId,
+                        comment: annotation.Comment
+                    )
                 )
                 .Entity;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return createdAnnotation;
         }
         catch
@@ -34,7 +33,7 @@ public class AnnotationService : IAnnotationService
     }
 
     /// <inheritdoc/>
-    public List<Annotation> GetAnnotationForEBook(int ebookId, int userId)
+    public List<Annotation> GetAnnotationsForEBook(int ebookId, int userId)
     {
         try
         {
@@ -60,15 +59,55 @@ public class AnnotationService : IAnnotationService
     }
 
     /// <inheritdoc/>
-    public bool DeleteAnnotationForEBook(int ebookId, int userId, int annotationId)
+    public async Task<bool> DeleteAnnotationForEBookAsync(int ebookId, int userId, int annotationId)
     {
-        try {
-            Annotation fetchedAnnotation = _context.Annotations.First(a => a.UserId == userId && a.EBookId == ebookId && a.AnnotationId == annotationId);
+        try
+        {
+            Annotation? fetchedAnnotation = await _context.Annotations.FindAsync(annotationId);
+
+            if (fetchedAnnotation == null)
+            {
+                throw new Exception($"Annotation {annotationId} doesn't exist");
+            }
+            else if (fetchedAnnotation.UserId != userId || fetchedAnnotation.EBookId != ebookId)
+            {
+                throw new Exception(
+                    $"Annotation either doesn't belong to User {userId}, EBook {ebookId} or both"
+                );
+            }
+
             _context.Remove(fetchedAnnotation);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
-        catch {
+        catch
+        {
+            throw new Exception();
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task<Annotation> GetAnnotationAsync(int ebookId, int userId, int annotationId)
+    {
+        try
+        {
+            Annotation? fetchedAnnotation = await _context.Annotations.FindAsync(annotationId);
+
+            if (fetchedAnnotation == null)
+            {
+                throw new Exception($"Annotation {annotationId} doesn't exist");
+            }
+            else if (fetchedAnnotation.UserId != userId || fetchedAnnotation.EBookId != ebookId)
+            {
+                throw new Exception(
+                    $"Annotation either doesn't belong to User {userId}, EBook {ebookId} or both"
+                );
+            }
+
+            return fetchedAnnotation;
+        }
+        catch
+        {
             throw new Exception();
         }
     }

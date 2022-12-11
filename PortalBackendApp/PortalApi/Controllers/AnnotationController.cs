@@ -23,15 +23,25 @@ public class AnnotationController : ControllerBase
     /// <param name="annotation"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult<Annotation> AddAnnotation(Annotation annotation)
+    public async Task<ActionResult<Annotation>> AddAnnotationAsync(Annotation annotation)
     {
         try
         {
-            return Ok(_annotationService.AddAnnotation(annotation));
+            Annotation createdAnnotation = await _annotationService.AddAnnotationAsync(annotation);
+            return CreatedAtAction(
+                nameof(GetAnnotationForEBook),
+                new
+                {
+                    userId = createdAnnotation.UserId,
+                    eBookId = createdAnnotation.EBookId,
+                    annotationId = createdAnnotation.AnnotationId
+                },
+                createdAnnotation
+            );
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -46,11 +56,11 @@ public class AnnotationController : ControllerBase
     {
         try
         {
-            return Ok(_annotationService.GetAnnotationForEBook(ebookId, userId));
+            return Ok(_annotationService.GetAnnotationsForEBook(ebookId, userId));
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -66,22 +76,58 @@ public class AnnotationController : ControllerBase
         {
             return Ok(_annotationService.GetAnnotationsForUser(userId));
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
-    [HttpGet("users/user/{userId}/ebooks/ebook/{ebookId}/annotations/annotation/{annotationId}")]
-    public ActionResult<bool> DeleteAnnotationForEBook(int ebookId, int userId, int annotationId)
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="ebookId"></param>
+    /// <param name="userId"></param>
+    /// <param name="annotationId"></param>
+    /// <returns></returns>
+    [HttpDelete("users/user/{userId}/ebooks/ebook/{ebookId}/annotations/annotation/{annotationId}")]
+    public ActionResult<bool> DeleteAnnotationForEBookAsync(int ebookId, int userId, int annotationId)
     {
         try
         {
-            return Ok(_annotationService.DeleteAnnotationForEBook(ebookId, userId, annotationId));
+            return Ok(_annotationService.DeleteAnnotationForEBookAsync(ebookId, userId, annotationId));
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="ebookId"></param>
+    /// <param name="userId"></param>
+    /// <param name="annotationId"></param>
+    /// <returns></returns>
+    [HttpGet("users/user/{userId}/ebooks/ebook/{ebookId}/annotations/annotation/{annotationId}")]
+    public async Task<ActionResult<Annotation>> GetAnnotationAsync(
+        int ebookId,
+        int userId,
+        int annotationId
+    )
+    {
+        try
+        {
+            Annotation? fetchedAnnotation = await _annotationService.GetAnnotationAsync(
+                ebookId,
+                userId,
+                annotationId
+            );
+            return fetchedAnnotation != null ? fetchedAnnotation : NotFound();
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
         }
     }
 }

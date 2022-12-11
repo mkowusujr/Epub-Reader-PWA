@@ -7,9 +7,9 @@ namespace PortalApi.Models;
 public class EBook
 {
     public int EBookId { get; set; }
-    public string? Title { get; set; }
-    public string? Author { get; set; }
-    public byte[]? CoverImage { get; set; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public byte[] CoverImage { get; set; }
     public string TableOfContentsAsJson { get; set; }
 
     #region Relationships
@@ -17,16 +17,16 @@ public class EBook
     public int UserId { get; set; }
     public User User { get; set; }
 
-    public List<Annotation> Annotations { get; set; }
+    public List<Annotation>? Annotations { get; set; }
 
     public List<Collection> Collections { get; set; }
 
     #endregion
 
-    public EBook(IFormFile epubFile, int userId)
+    public EBook(Stream epubFileStream, int userId, List<Collection> collections)
     {
         EpubReaderService epubReaderService = new EpubReaderService();
-        EpubBook parsedEBook = epubReaderService.ParsedEpubFile(epubFile);
+        EpubBook parsedEBook = epubReaderService.ParsedEpubFile(epubFileStream);
 
         Title = epubReaderService.GetTitle(parsedEBook);
         Author = epubReaderService.GetAuthors(parsedEBook);
@@ -36,10 +36,12 @@ public class EBook
         );
 
         UserId = userId;
+        Annotations = new List<Annotation>();
+        Collections = collections;
     }
 
     public EBook()
     {
-        // Empty constructor used for unit testing
+        // Empty constructor used for ef core
     }
 }

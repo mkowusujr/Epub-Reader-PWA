@@ -10,46 +10,38 @@ namespace PortalApi.Services;
 public class EpubReaderService : IEpubReaderService
 {
     /// <inheritdoc/>
-    public EpubBook ParsedEpubFile(IFormFile epubFile)
+    public EpubBook ParsedEpubFile(Stream epubFileStream)
     {
-        Stream epubStream = epubFile.OpenReadStream();
-        EpubBook parsedEpubBook = EpubReader.Read(epubStream, leaveOpen: false);
-
-        return parsedEpubBook;
+        return EpubReader.Read(epubFileStream, leaveOpen: false);
     }
 
     /// <inheritdoc/>
-    public string? GetTitle(EpubBook? eBook)
+    public string GetTitle(EpubBook eBook)
     {
-        return eBook?.Title;
+        return eBook.Title;
     }
 
     /// <inheritdoc/>
-    public string? GetAuthors(EpubBook? eBook)
+    public string GetAuthors(EpubBook eBook)
     {
-        if (eBook != null)
-        {
-            List<string> authors = eBook.Authors.ToList();
-            return authors.Count == 1 ? authors[0] : string.Join(", ", authors);
-        }
-
-        return null;
+        List<string> authors = eBook.Authors.ToList();
+        return authors.Count == 1 ? authors[0] : string.Join(", ", authors);
     }
 
     /// <inheritdoc/>
-    public List<EpubChapter>? GetTableOfContents(EpubBook? eBook)
+    public List<EpubChapter> GetTableOfContents(EpubBook eBook)
     {
-        return eBook?.TableOfContents;
+        return eBook.TableOfContents;
     }
 
     /// <inheritdoc/>
-    public byte[]? GetCoverImage(EpubBook? eBook)
+    public byte[] GetCoverImage(EpubBook eBook)
     {
-        return eBook?.CoverImage;
+        return eBook.CoverImage;
     }
 
     /// <inheritdoc/>
-    public string? GetHtmlPage(EpubBook? eBook, string fileName)
+    public string? GetHtmlPage(EpubBook eBook, string fileName)
     {
         var config = Configuration.Default;
         using var context = BrowsingContext.New(config);

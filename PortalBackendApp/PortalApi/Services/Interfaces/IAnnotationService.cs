@@ -12,7 +12,7 @@ public interface IAnnotationService
     /// </summary>
     /// <param name="annotation"></param>
     /// <returns></returns>
-    public Annotation AddAnnotation(Annotation annotation);
+    public Task<Annotation> AddAnnotationAsync(Annotation annotation);
 
     /// <summary>
     /// 
@@ -20,7 +20,7 @@ public interface IAnnotationService
     /// <param name="ebookId"></param>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public List<Annotation> GetAnnotationForEBook(int ebookId, int userId);
+    public List<Annotation> GetAnnotationsForEBook(int ebookId, int userId);
 
     /// <summary>
     /// 
@@ -36,5 +36,14 @@ public interface IAnnotationService
     /// <param name="userId"></param>
     /// <param name="annotationId"></param>
     /// <returns></returns>
-    public bool DeleteAnnotationForEBook(int ebookId, int userId, int annotationId);
+    public Task<bool> DeleteAnnotationForEBookAsync(int ebookId, int userId, int annotationId);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="ebookId"></param>
+    /// <param name="userId"></param>
+    /// <param name="annotationId"></param>
+    /// <returns></returns>
+    public Task<Annotation> GetAnnotationAsync(int ebookId, int userId, int annotationId);
 }

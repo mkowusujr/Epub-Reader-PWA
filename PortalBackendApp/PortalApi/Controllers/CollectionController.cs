@@ -23,15 +23,20 @@ public class CollectionController : ControllerBase
     /// <param name="collection"></param>
     /// <returns></returns>
     [HttpPost]
-    public ActionResult<Collection> AddCollection(Collection collection)
+    public async Task<ActionResult<Collection>> AddCollectionAsync(Collection collection)
     {
         try
         {
-            return Ok(_collectionService.AddCollection(collection));
+            Collection createdCollection = await _collectionService.AddCollectionAsync(collection);
+            return CreatedAtAction(
+                nameof(GetCollectionForUserAsync),
+                new { userId = createdCollection.UserId, eBookId = createdCollection.CollectionId },
+                createdCollection
+            );
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -41,15 +46,15 @@ public class CollectionController : ControllerBase
     /// <param name="userId"></param>
     /// <returns></returns>
     [HttpGet("users/user/{userId}/collections/collection/{collectionId}")]
-    public ActionResult<Collection> GetCollectionForUser(int userId, int collectionId)
+    public async Task<ActionResult<Collection>> GetCollectionForUserAsync(int userId, int collectionId)
     {
         try
         {
-            return Ok(_collectionService.GetCollectionForUser(userId, collectionId));
+            return Ok(await _collectionService.GetCollectionForUserAsync(userId, collectionId));
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
@@ -66,37 +71,47 @@ public class CollectionController : ControllerBase
         {
             return Ok(_collectionService.GetEBooksInCollectionForUser(userId, collectionId));
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
-    [HttpPost("users/user/{userId}/collections/collection/{collectionId}/add-ebook/{ebookId}")]
-    public ActionResult<bool> AddEBookToCollectionForUser(int userId, int ebookId, int collectionId)
+    [HttpPut("users/user/{userId}/collections/collection/{collectionId}/add-ebook/{ebookId}")]
+    public async Task<ActionResult<bool>> AddEBookToCollectionForUserAsync(
+        int userId,
+        int ebookId,
+        int collectionId
+    )
     {
         try
         {
             return Ok(
-                _collectionService.AddEBookToCollectionForUser(userId, ebookId, collectionId)
+                await _collectionService.AddEBookToCollectionForUserAsync(userId, ebookId, collectionId)
             );
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 
-    [HttpDelete("users/user/{userId}/collections/collection/{collectionId}/remove-ebook/{ebookId}")]
-    public ActionResult<bool> RemoveEBookFromCollection(int userId, int ebookId, int collectionId)
+    [HttpPut("users/user/{userId}/collections/collection/{collectionId}/remove-ebook/{ebookId}")]
+    public async Task<ActionResult<bool>> RemoveEBookFromCollectionAsync(
+        int userId,
+        int ebookId,
+        int collectionId
+    )
     {
         try
         {
-            return Ok(_collectionService.RemoveEBookFromCollection(userId, ebookId, collectionId));
+            return Ok(
+                await _collectionService.RemoveEBookFromCollectionAsync(userId, ebookId, collectionId)
+            );
         }
-        catch
+        catch (Exception e)
         {
-            return BadRequest();
+            return BadRequest(e.Message);
         }
     }
 }

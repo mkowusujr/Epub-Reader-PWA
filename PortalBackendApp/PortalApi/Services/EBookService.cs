@@ -11,35 +11,41 @@ public class EBookService : IEBookService
     public EBookService(PortalDbContext context) => _context = context;
 
     /// <inheritdoc/>
-    public EBook AddEBookForUser(EBookInputModel ebookInputModel)
+    public async Task<EBook> AddEBookForUserAsync(EBookInputModel ebookInputModel)
     {
         try
         {
             EBook createdEBook = _context.EBooks
-                .Add(new EBook(ebookInputModel.EpubFile, ebookInputModel.UserId))
+                .Add(
+                    new EBook(
+                        epubFileStream: ebookInputModel.EpubFile.OpenReadStream(),
+                        userId: ebookInputModel.UserId,
+                        collections: ebookInputModel.Collections
+                    )
+                )
                 .Entity;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return createdEBook;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new Exception(e.Message);
         }
     }
 
     /// <inheritdoc/>
-    public bool DeleteEBookForUser(int userId, int eBookId)
+    public async Task<bool> DeleteEBookForUserAsync(int userId, int eBookId)
     {
         try
         {
             EBook fetchedEBook = _context.EBooks.First(e => e.EBookId == eBookId);
             _context.Remove(fetchedEBook);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new Exception(e.Message);
         }
     }
 
@@ -50,22 +56,31 @@ public class EBookService : IEBookService
         {
             return _context.EBooks.ToList();
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new Exception(e.Message);
         }
     }
 
     /// <inheritdoc/>
-    public EBook? GetEBookForUser(int userId, int eBookId)
+    public async Task<EBook?> GetEBookForUserAsync(int userId, int eBookId)
     {
         try
         {
-            return _context.EBooks.First(e => e.UserId == userId && e.EBookId == eBookId);
+            EBook? fetchedEBook = await _context.EBooks.FindAsync(eBookId);
+            if (fetchedEBook == null)
+            {
+                throw new Exception($"EBook {eBookId} was not found");
+            }
+            else if (fetchedEBook.UserId != userId)
+            {
+                throw new Exception($"User {userId} doesn't own ebook {eBookId}");
+            }
+            return fetchedEBook;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new Exception(e.Message);
         }
     }
 }

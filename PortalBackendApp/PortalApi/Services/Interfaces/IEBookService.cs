@@ -12,7 +12,7 @@ public interface IEBookService
     /// </summary>
     /// <param name="ebookInputModel"></param>
     /// <returns></returns>
-    public EBook AddEBookForUser(EBookInputModel ebookInputModel);
+    public Task<EBook> AddEBookForUserAsync(EBookInputModel ebookInputModel);
 
     /// <summary>
     /// 
@@ -20,7 +20,7 @@ public interface IEBookService
     /// <param name="userId"></param>
     /// <param name="eBookId"></param>
     /// <returns></returns>
-    public EBook? GetEBookForUser(int userId, int eBookId);
+    public Task<EBook?> GetEBookForUserAsync(int userId, int eBookId);
 
     /// <summary>
     /// 
@@ -35,5 +35,5 @@ public interface IEBookService
     /// <param name="userId"></param>
     /// <param name="eBookId"></param>
     /// <returns></returns>
-    public bool DeleteEBookForUser(int userId, int eBookId);
+    public Task<bool> DeleteEBookForUserAsync(int userId, int eBookId);
 }
