@@ -5,6 +5,7 @@ PortalBackendApp/PortalApi.Tests/bin
 PortalBackendApp/PortalApi.Tests/obj
 PortalBackendApp/PortalApi/EBookMetaData.db-wal
 PortalBackendApp/PortalApi/EBookMetaData.db-shm
+PortalBackendApp/PortalApi.Tests/coveragereport
 
 # Logs
 logs
