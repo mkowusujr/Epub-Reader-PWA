@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortalApi.Models;
 
@@ -11,10 +12,11 @@ using PortalApi.Models;
 namespace PortalApi.Migrations
 {
     [DbContext(typeof(PortalDbContext))]
+    [Migration("20221212152136_AddedeEBookEpubFileToEBookEntity")]
     [ExcludeFromCodeCoverage]
-    partial class PortalDbContextModelSnapshot : ModelSnapshot
+    partial class AddedeEBookEpubFileToEBookEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");

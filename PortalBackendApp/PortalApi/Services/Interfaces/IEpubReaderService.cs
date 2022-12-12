@@ -1,4 +1,5 @@
 using EpubSharp;
+using PortalApi.Models;
 
 namespace PortalApi.Services.Interfaces;
 
@@ -12,7 +13,7 @@ public interface IEpubReaderService
     /// </summary>
     /// <param name="filename">The filename.</param>
     /// <returns>The e book</returns>
-    public EpubBook ParsedEpubFile(Stream epubFileStream);
+    public EpubBook ParseEpubFile(Stream epubFileStream);
 
     /// <summary>
     /// Gets the title of the epub
@@ -33,7 +34,7 @@ public interface IEpubReaderService
     /// </summary>
     /// <param name="eBook">The e book.</param>
     /// <returns>A string containing multiple anchor elements</returns>
-    public List<EpubChapter> GetTableOfContents(EpubBook eBook);
+    public List<EpubChapter> GetTableOfContents(EBook eBook);
 
     /// <summary>
     /// Gets the cover image of the ebook
@@ -48,5 +49,5 @@ public interface IEpubReaderService
     /// <param name="eBook">The e book.</param>
     /// <param name="fileName">The filename of the page being fetched</param>
     /// <returns>Markdown string with the html body contents</returns>
-    public string? GetHtmlPage(EpubBook eBook, string fileName);
+    public string? GetHtmlPage(EBook eBook, string fileName);
 }

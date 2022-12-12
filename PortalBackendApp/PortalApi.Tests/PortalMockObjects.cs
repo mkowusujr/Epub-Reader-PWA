@@ -33,7 +33,7 @@ public class PortalMockObjects
         #endregion
     }
 
-    public EBookInputModel GenerateEBookForUser(int userId, int bookOption = 1)
+    public EBookInputModel GenerateEBookInputModelForUser(int userId, int bookOption = 1)
     {
         string filePath;
         switch (bookOption)

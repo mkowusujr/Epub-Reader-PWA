@@ -1,76 +1,258 @@
-// using EpubSharp;
-// using FluentAssertions;
-// using PortalApi.Services;
+using EpubSharp;
+using Newtonsoft.Json;
 
-// namespace PortalApi.Tests.Services.Tests;
-// public class EReaderSharpServiceTests
-// {
-//     private readonly string resourcesDirectory =
-//         Path.Combine(Directory.GetCurrentDirectory(), @"Services.Tests\Resources\");
+namespace PortalApi.Tests.Services.Tests;
 
-//     private readonly EpubReaderService _epubReaderService = new();
-//     private EpubBook? eBook;
+public class EReaderSharpServiceTests
+{
+    public PortalMockObjects mockObjects = new PortalMockObjects();
 
-//     [Fact]
-//     public void TestGetTitle()
-//     {
-//         string testEpubFilePath = Path.Combine(resourcesDirectory, "frankenstien.epub");
-//         eBook = _epubReaderService.ParsedEpubFile(testEpubFilePath);
+    [Fact]
+    public void ParseEpubFile_ShouldReturnAnEpubBook_WithValidInput()
+    {
+        using (var factory = new PortalDbContextFactory())
+        {
+            using (var context = factory.CreateContext())
+            {
+                context.Database.EnsureCreated();
+                User dummyUser = context.Users.Add(mockObjects.mockUserJohnDoe).Entity;
+                context.SaveChanges();
+                EpubReaderService epubReaderService = new EpubReaderService();
 
-//         const string expectedTitle = "Frankenstein; Or, The Modern Prometheus";
+                EBookInputModel dummyEBookInputModel = mockObjects.GenerateEBookInputModelForUser(
+                    userId: dummyUser.UserId
+                );
 
-//         _epubReaderService.GetTitle(eBook)?.Should().Be(expectedTitle);
-//     }
+                EpubBook response = epubReaderService.ParseEpubFile(
+                    dummyEBookInputModel.EpubFile.OpenReadStream()
+                );
+            }
+        }
+    }
 
-//     [Fact]
-//     public void TestGetAuthors()
-//     {
-//         string testEpubFilePath = Path.Combine(resourcesDirectory, "frankenstien.epub");
-//         eBook = _epubReaderService.ParsedEpubFile(testEpubFilePath);
+    [Fact]
+    public void ParseEpubFile_ShouldThrowError_OnInvalidInput()
+    {
+        EpubReaderService epubReaderService = new EpubReaderService();
 
-//         const string expectedAuthors = "Mary Wollstonecraft Shelley";
+        Action act = () => epubReaderService.ParseEpubFile(epubFileStream: new Object() as Stream);
 
-//         _epubReaderService.GetAuthors(eBook)?.Should().Be(expectedAuthors);
-//     }
+        act.Should().Throw<Exception>();
+    }
 
-//     [Fact]
-//     public void TestTableOfContents()
-//     {
-//         string testEpubFilePath = Path.Combine(resourcesDirectory, "frankenstien.epub");
-//         eBook = _epubReaderService.ParsedEpubFile(testEpubFilePath);
+    [Fact]
+    public void GetTitle_ShouldReturnAnEpubTitle_WithValidInput()
+    {
+        using (var factory = new PortalDbContextFactory())
+        {
+            using (var context = factory.CreateContext())
+            {
+                context.Database.EnsureCreated();
+                User dummyUser = context.Users.Add(mockObjects.mockUserJohnDoe).Entity;
+                context.SaveChanges();
+                EpubReaderService epubReaderService = new EpubReaderService();
 
-//         string expectedTableOfContentsFilePath = Path.Combine(resourcesDirectory, "ExpectedTableOfContent.txt");
-//         string[] expectedTableOfContentsOutputFile = File.ReadAllLines(expectedTableOfContentsFilePath);
+                EBookInputModel dummyEBookInputModel = mockObjects.GenerateEBookInputModelForUser(
+                    userId: dummyUser.UserId
+                );
 
-//         string expectedTableOfContents = string.Join("\n", expectedTableOfContentsOutputFile);
+                EpubBook epubBook = epubReaderService.ParseEpubFile(
+                    dummyEBookInputModel.EpubFile.OpenReadStream()
+                );
 
-//         // _epubReaderService.GetTableOfContents(eBook)?.Should().Be(expectedTableOfContents);
-//     }
+                string response = epubReaderService.GetTitle(epubBook);
 
-//     [Fact]
-//     public void TestGetHtmlPage()
-//     {
-//         string testEpubFilePath = Path.Combine(resourcesDirectory, "frankenstien.epub");
-//         eBook = _epubReaderService.ParsedEpubFile(testEpubFilePath);
+                response.Should().Be("Frankenstein; Or, The Modern Prometheus");
+            }
+        }
+    }
 
-//         string letter2PageFilePath = Path.Combine(resourcesDirectory, "ExpectedLetter2Page.txt");
-//         string chap1PageFilePath = Path.Combine(resourcesDirectory, "ExpectedChap01Page.txt");
-//         string chap21PageFilePath = Path.Combine(resourcesDirectory, "ExpectedChap21Page.txt");
+    [Fact]
+    public void GetTitle_ShouldThrowError_OnInvalidInput()
+    {
+        EpubReaderService epubReaderService = new EpubReaderService();
 
-//         string[] letter2PageRawHtml = File.ReadAllLines(letter2PageFilePath);
-//         string[] chap1PageRawHtml = File.ReadAllLines(chap1PageFilePath);
-//         string[] chap21PageRawHtml = File.ReadAllLines(chap21PageFilePath);
+        Action act = () => epubReaderService.GetTitle(new Object() as EpubBook);
 
+        act.Should().Throw<Exception>();
+    }
 
-//         string expectedLetter2Page = string.Join("\n", letter2PageRawHtml);
-//         string expectedChap1Page = string.Join("\n", chap1PageRawHtml);
-//         string expectedChap21Page = string.Join("\n", chap21PageRawHtml);
+    [Fact]
+    public void GetAuthors_ShouldReturnAnEpubAuthor_WithValidInput()
+    {
+        using (var factory = new PortalDbContextFactory())
+        {
+            using (var context = factory.CreateContext())
+            {
+                context.Database.EnsureCreated();
+                User dummyUser = context.Users.Add(mockObjects.mockUserJohnDoe).Entity;
+                context.SaveChanges();
+                EpubReaderService epubReaderService = new EpubReaderService();
 
-//         _epubReaderService.GetHtmlPage(eBook, "letter2").Should().Contain("id=\"letter2\"");
-//         _epubReaderService.GetHtmlPage(eBook, "letter2").Should().Be(expectedLetter2Page);
-//         _epubReaderService.GetHtmlPage(eBook, "chap01").Should().Contain("id=\"chap01\"");
-//         _epubReaderService.GetHtmlPage(eBook, "chap01").Should().Be(expectedChap1Page);
-//         _epubReaderService.GetHtmlPage(eBook, "chap21").Should().Contain("id=\"chap21\"");
-//         _epubReaderService.GetHtmlPage(eBook, "chap21").Should().Be(expectedChap21Page);
-//     }
-// }
+                EBookInputModel dummyEBookInputModel = mockObjects.GenerateEBookInputModelForUser(
+                    userId: dummyUser.UserId
+                );
+
+                EpubBook epubBook = epubReaderService.ParseEpubFile(
+                    dummyEBookInputModel.EpubFile.OpenReadStream()
+                );
+
+                string response = epubReaderService.GetAuthors(epubBook);
+
+                response.Should().Be("Mary Wollstonecraft Shelley");
+            }
+        }
+    }
+
+    [Fact]
+    public void GetAuthors_ShouldThrowError_OnInvalidInput()
+    {
+        EpubReaderService epubReaderService = new EpubReaderService();
+
+        Action act = () => epubReaderService.GetAuthors(new Object() as EpubBook);
+
+        act.Should().Throw<Exception>();
+    }
+
+    [Fact]
+    public void GetCoverImage_ShouldReturnAnEpubCoverImage_WithValidInput()
+    {
+        using (var factory = new PortalDbContextFactory())
+        {
+            using (var context = factory.CreateContext())
+            {
+                context.Database.EnsureCreated();
+                User dummyUser = context.Users.Add(mockObjects.mockUserJohnDoe).Entity;
+                context.SaveChanges();
+                EpubReaderService epubReaderService = new EpubReaderService();
+
+                EBookInputModel dummyEBookInputModel = mockObjects.GenerateEBookInputModelForUser(
+                    userId: dummyUser.UserId
+                );
+
+                EpubBook epubBook = epubReaderService.ParseEpubFile(
+                    dummyEBookInputModel.EpubFile.OpenReadStream()
+                );
+
+                byte[] response = epubReaderService.GetCoverImage(epubBook);
+
+                response.Should().NotBeNull();
+            }
+        }
+    }
+
+    [Fact]
+    public void GetCoverImage_ShouldThrowError_OnInvalidInput()
+    {
+        EpubReaderService epubReaderService = new EpubReaderService();
+
+        Action act = () => epubReaderService.GetCoverImage(new Object() as EpubBook);
+
+        act.Should().Throw<Exception>();
+    }
+
+    [Fact]
+    public void GetTableOfContents_ShouldReturnAnEpubAuthor_WithValidInput()
+    {
+        using (var factory = new PortalDbContextFactory())
+        {
+            using (var context = factory.CreateContext())
+            {
+                context.Database.EnsureCreated();
+                User dummyUser = context.Users.Add(mockObjects.mockUserJohnDoe).Entity;
+                context.SaveChanges();
+                EpubReaderService epubReaderService = new EpubReaderService();
+                EBook dummyEBook = context.EBooks
+                    .Add(
+                        new EBook(
+                            epubFileStream: mockObjects
+                                .GenerateEBookInputModelForUser(dummyUser.UserId)
+                                .EpubFile.OpenReadStream(),
+                            userId: dummyUser.UserId,
+                            collections: new List<Collection>()
+                        )
+                    )
+                    .Entity;
+                context.SaveChanges();
+
+                List<EpubChapter> response = epubReaderService.GetTableOfContents(dummyEBook);
+
+                response.Count.Should().Be(33);
+            }
+        }
+    }
+
+    [Fact]
+    public void GetTableOfContents_ShouldThrowError_OnInvalidInput()
+    {
+        EpubReaderService epubReaderService = new EpubReaderService();
+
+        Action act = () => epubReaderService.GetTableOfContents(new Object() as EBook);
+
+        act.Should().Throw<Exception>();
+    }
+
+    [Fact]
+    public void GetHtmlPage_ShouldReturnAnEpubHtmlPage_WithValidInput()
+    {
+        using (var factory = new PortalDbContextFactory())
+        {
+            using (var context = factory.CreateContext())
+            {
+                context.Database.EnsureCreated();
+                User dummyUser = context.Users.Add(mockObjects.mockUserJohnDoe).Entity;
+                context.SaveChanges();
+                EpubReaderService epubReaderService = new EpubReaderService();
+                EBook dummyEBook = context.EBooks
+                    .Add(
+                        new EBook(
+                            epubFileStream: mockObjects
+                                .GenerateEBookInputModelForUser(dummyUser.UserId)
+                                .EpubFile.OpenReadStream(),
+                            userId: dummyUser.UserId,
+                            collections: new List<Collection>()
+                        )
+                    )
+                    .Entity;
+                context.SaveChanges();
+
+                string? letter1 = epubReaderService.GetHtmlPage(
+                    dummyEBook,
+                    "7034958079997369471_84-h-1.htm.html"
+                );
+                string? letter2 = epubReaderService.GetHtmlPage(
+                    dummyEBook,
+                    "7034958079997369471_84-h-2.htm.html"
+                );
+                string? chapter1 = epubReaderService.GetHtmlPage(
+                    dummyEBook,
+                    "7034958079997369471_84-h-5.htm.html"
+                );
+                string? chapter11 = epubReaderService.GetHtmlPage(
+                    dummyEBook,
+                    "7034958079997369471_84-h-15.htm.html"
+                );
+                string? chapter14 = epubReaderService.GetHtmlPage(
+                    dummyEBook,
+                    "7034958079997369471_84-h-18.htm.html"
+                );
+
+                letter1.Should().NotBeNull().And.Contain("Letter 1");
+                letter2.Should().NotBeNull().And.Contain("Letter 2");
+                chapter1.Should().NotBeNull().And.Contain("Chapter 1");
+                chapter11.Should().NotBeNull().And.Contain("Chapter 1");
+                chapter14.Should().NotBeNull().And.Contain("Chapter 1");
+            }
+        }
+    }
+
+    [Fact]
+    public void GetHtmlPage_ShouldThrowError_OnInvalidInput()
+    {
+        EpubReaderService epubReaderService = new EpubReaderService();
+
+        Action act = () => epubReaderService.GetHtmlPage(new Object() as EBook, fileName: "fakeFile");
+
+        act.Should().Throw<Exception>();
+    }
+}

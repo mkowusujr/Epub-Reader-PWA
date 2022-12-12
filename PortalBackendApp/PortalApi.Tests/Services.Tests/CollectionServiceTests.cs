@@ -43,21 +43,21 @@ public class CollectionServiceTests
                 context.EBooks.AddRange(
                     new EBook(
                         epubFileStream: mockObjects
-                            .GenerateEBookForUser(dummyUser.UserId)
+                            .GenerateEBookInputModelForUser(dummyUser.UserId)
                             .EpubFile.OpenReadStream(),
                         userId: dummyUser.UserId,
                         collections: new List<Collection>()
                     ),
                     new EBook(
                         epubFileStream: mockObjects
-                            .GenerateEBookForUser(dummyUser.UserId, bookOption: 2)
+                            .GenerateEBookInputModelForUser(dummyUser.UserId, bookOption: 2)
                             .EpubFile.OpenReadStream(),
                         userId: dummyUser.UserId,
                         collections: new List<Collection>()
                     ),
                     new EBook(
                         epubFileStream: mockObjects
-                            .GenerateEBookForUser(dummyUser.UserId, bookOption: 3)
+                            .GenerateEBookInputModelForUser(dummyUser.UserId, bookOption: 3)
                             .EpubFile.OpenReadStream(),
                         userId: dummyUser.UserId,
                         collections: new List<Collection>()
@@ -134,21 +134,21 @@ public class CollectionServiceTests
                 context.EBooks.AddRange(
                     new EBook(
                         epubFileStream: mockObjects
-                            .GenerateEBookForUser(dummyUser.UserId)
+                            .GenerateEBookInputModelForUser(dummyUser.UserId)
                             .EpubFile.OpenReadStream(),
                         userId: dummyUser.UserId,
                         collections: new List<Collection>()
                     ),
                     new EBook(
                         epubFileStream: mockObjects
-                            .GenerateEBookForUser(dummyUser.UserId, bookOption: 2)
+                            .GenerateEBookInputModelForUser(dummyUser.UserId, bookOption: 2)
                             .EpubFile.OpenReadStream(),
                         userId: dummyUser.UserId,
                         collections: new List<Collection>()
                     ),
                     new EBook(
                         epubFileStream: mockObjects
-                            .GenerateEBookForUser(dummyUser.UserId, bookOption: 3)
+                            .GenerateEBookInputModelForUser(dummyUser.UserId, bookOption: 3)
                             .EpubFile.OpenReadStream(),
                         userId: dummyUser.UserId,
                         collections: new List<Collection>()
@@ -286,7 +286,7 @@ public class CollectionServiceTests
                     .Add(
                         new EBook(
                             epubFileStream: mockObjects
-                                .GenerateEBookForUser(dummyUser.UserId)
+                                .GenerateEBookInputModelForUser(dummyUser.UserId)
                                 .EpubFile.OpenReadStream(),
                             userId: dummyUser.UserId,
                             collections: new List<Collection>()
@@ -359,7 +359,7 @@ public class CollectionServiceTests
                     .Add(
                         new EBook(
                             epubFileStream: mockObjects
-                                .GenerateEBookForUser(dummyUser.UserId)
+                                .GenerateEBookInputModelForUser(dummyUser.UserId)
                                 .EpubFile.OpenReadStream(),
                             userId: dummyUser.UserId,
                             collections: new List<Collection> { dummyUser.Collections.First() }
@@ -426,21 +426,21 @@ public class CollectionServiceTests
                 context.EBooks.AddRange(
                     new EBook(
                         epubFileStream: mockObjects
-                            .GenerateEBookForUser(dummyUser.UserId)
+                            .GenerateEBookInputModelForUser(dummyUser.UserId)
                             .EpubFile.OpenReadStream(),
                         userId: dummyUser.UserId,
                         collections: new List<Collection> { dummyUser.Collections.First() }
                     ),
                     new EBook(
                         epubFileStream: mockObjects
-                            .GenerateEBookForUser(dummyUser.UserId, bookOption: 2)
+                            .GenerateEBookInputModelForUser(dummyUser.UserId, bookOption: 2)
                             .EpubFile.OpenReadStream(),
                         userId: dummyUser.UserId,
                         collections: new List<Collection> { dummyUser.Collections.First() }
                     ),
                     new EBook(
                         epubFileStream: mockObjects
-                            .GenerateEBookForUser(dummyUser.UserId, bookOption: 3)
+                            .GenerateEBookInputModelForUser(dummyUser.UserId, bookOption: 3)
                             .EpubFile.OpenReadStream(),
                         userId: dummyUser.UserId,
                         collections: new List<Collection> { dummyUser.Collections.First() }
