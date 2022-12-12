@@ -45,8 +45,29 @@ public class CollectionController : ControllerBase
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
+    [HttpGet("users/user/{userId}/collections")]
+    public async Task<ActionResult<Collection>> GetCollectionsForUserAsync(int userId)
+    {
+        try
+        {
+            return Ok(await _collectionService.GetCollectionsForUserAsync(userId));
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
     [HttpGet("users/user/{userId}/collections/collection/{collectionId}")]
-    public async Task<ActionResult<Collection>> GetCollectionForUserAsync(int userId, int collectionId)
+    public async Task<ActionResult<Collection>> GetCollectionForUserAsync(
+        int userId,
+        int collectionId
+    )
     {
         try
         {
@@ -64,12 +85,17 @@ public class CollectionController : ControllerBase
     /// <param name="userId"></param>
     /// <param name="collectionId"></param>
     /// <returns></returns>
-    [HttpGet("users/user/{userId}/collections")]
-    public ActionResult<List<EBook>> GetEBooksInCollectionForUser(int userId, int collectionId)
+    [HttpGet("users/user/{userId}/collections/collection/{collectionId}")]
+    public async Task<ActionResult<List<EBook>>> GetEBooksInCollectionForUserAsync(
+        int userId,
+        int collectionId
+    )
     {
         try
         {
-            return Ok(_collectionService.GetEBooksInCollectionForUser(userId, collectionId));
+            return Ok(
+                await _collectionService.GetEBooksInCollectionForUserAsync(userId, collectionId)
+            );
         }
         catch (Exception e)
         {
@@ -77,6 +103,13 @@ public class CollectionController : ControllerBase
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="ebookId"></param>
+    /// <param name="collectionId"></param>
+    /// <returns></returns>
     [HttpPut("users/user/{userId}/collections/collection/{collectionId}/add-ebook/{ebookId}")]
     public async Task<ActionResult<bool>> AddEBookToCollectionForUserAsync(
         int userId,
@@ -87,7 +120,11 @@ public class CollectionController : ControllerBase
         try
         {
             return Ok(
-                await _collectionService.AddEBookToCollectionForUserAsync(userId, ebookId, collectionId)
+                await _collectionService.AddEBookToCollectionForUserAsync(
+                    userId,
+                    ebookId,
+                    collectionId
+                )
             );
         }
         catch (Exception e)
@@ -96,6 +133,13 @@ public class CollectionController : ControllerBase
         }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="ebookId"></param>
+    /// <param name="collectionId"></param>
+    /// <returns></returns>
     [HttpPut("users/user/{userId}/collections/collection/{collectionId}/remove-ebook/{ebookId}")]
     public async Task<ActionResult<bool>> RemoveEBookFromCollectionAsync(
         int userId,
@@ -106,7 +150,11 @@ public class CollectionController : ControllerBase
         try
         {
             return Ok(
-                await _collectionService.RemoveEBookFromCollectionAsync(userId, ebookId, collectionId)
+                await _collectionService.RemoveEBookFromCollectionAsync(
+                    userId,
+                    ebookId,
+                    collectionId
+                )
             );
         }
         catch (Exception e)

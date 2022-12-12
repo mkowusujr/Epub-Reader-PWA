@@ -27,7 +27,7 @@ public interface IEBookService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public List<EBook> GetEBooksForUser(int userId);
+    public Task<List<EBook>> GetEBooksForUserAsync(int userId);
 
     /// <summary>
     /// 

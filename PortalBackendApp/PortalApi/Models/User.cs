@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace PortalApi.Models;
 
 public class User
@@ -27,6 +29,7 @@ public class User
         Annotations = new List<Annotation>();
     }
 
+    [ExcludeFromCodeCoverage]
     public User()
     {
         // Empty constructor used for ef core

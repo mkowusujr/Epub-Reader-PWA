@@ -40,18 +40,21 @@ public class PortalMockObjects
         {
             case 2:
                 filePath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                @"Services.Tests\Resources\moby-dick.epub");
+                    Directory.GetCurrentDirectory(),
+                    @"Services.Tests\Resources\moby-dick.epub"
+                );
                 break;
             case 3:
                 filePath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                @"Services.Tests\Resources\great-gatsby.epub");
+                    Directory.GetCurrentDirectory(),
+                    @"Services.Tests\Resources\great-gatsby.epub"
+                );
                 break;
             default:
                 filePath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                @"Services.Tests\Resources\frankenstein.epub");
+                    Directory.GetCurrentDirectory(),
+                    @"Services.Tests\Resources\frankenstein.epub"
+                );
                 break;
         }
 
@@ -75,5 +78,15 @@ public class PortalMockObjects
             epubFile: franksteinFormFile,
             collections: new List<Collection>()
         );
+    }
+
+    public Collection GenerateEmptyCollectionForUser(int userId, string collectionName)
+    {
+        return new Collection(name: collectionName, userId: userId, eBooks: new List<EBook>());
+    }
+
+    public Collection GenerateNonEmptyCollectionForUser(int userId, string collectionName, List<EBook> eBooks)
+    {
+        return new Collection(name: collectionName, userId: userId, eBooks: eBooks);
     }
 }

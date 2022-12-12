@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace PortalApi.Models;
 
 public class Annotation
@@ -18,6 +20,7 @@ public class Annotation
     public Annotation(string comment, int userId, int eBookId) =>
         (Comment, UserId, EBookId) = (comment, userId, eBookId);
 
+    [ExcludeFromCodeCoverage]
     public Annotation()
     { 
         // Empty constructor used for ef core

@@ -50,11 +50,16 @@ public class EBookService : IEBookService
     }
 
     /// <inheritdoc/>
-    public List<EBook> GetEBooksForUser(int userId)
+    public async Task<List<EBook>> GetEBooksForUserAsync(int userId)
     {
         try
         {
-            return _context.EBooks.ToList();
+            User? user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new Exception($"User {userId} doesn't exist");
+            }
+            return user.EBooks;
         }
         catch (Exception e)
         {

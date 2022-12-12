@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace PortalApi.Models;
 
 public class Collection
@@ -22,6 +24,7 @@ public class Collection
         EBooks = eBooks;
     }
 
+    [ExcludeFromCodeCoverage]
     public Collection()
     {
         // Empty constructor used for ef core

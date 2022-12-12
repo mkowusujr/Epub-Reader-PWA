@@ -33,7 +33,11 @@ public class CollectionService : ICollectionService
     }
 
     /// <inheritdoc/>
-    public async Task<bool> AddEBookToCollectionForUserAsync(int userId, int ebookId, int collectionId)
+    public async Task<bool> AddEBookToCollectionForUserAsync(
+        int userId,
+        int ebookId,
+        int collectionId
+    )
     {
         try
         {
@@ -70,6 +74,24 @@ public class CollectionService : ICollectionService
 
             return fetchedCollection;
         }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<Collection>?> GetCollectionsForUserAsync(int userId)
+    {
+        try
+        {
+            User? user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("User {userId} doesn't exist");
+            }
+            return user.Collections;
+        }
         catch
         {
             throw new Exception();
@@ -77,36 +99,33 @@ public class CollectionService : ICollectionService
     }
 
     /// <inheritdoc/>
-    public List<Collection>? GetCollectionsForUser(int userId)
+    public async Task<List<EBook>> GetEBooksInCollectionForUserAsync(int userId, int collectionId)
     {
         try
         {
-            return _context.Users.First(u => u.UserId == userId).Collections;
-        }
-        catch
-        {
-            throw new Exception();
-        }
-    }
+            User? user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new Exception("User {userId} doesn't exist");
+            }
 
-    /// <inheritdoc/>
-    public List<EBook> GetEBooksInCollectionForUser(int userId, int collectionId)
-    {
-        try
-        {
-            List<EBook> collectionEBooks = _context.Collections
-                .First(c => c.UserId == userId && c.CollectionId == collectionId)
+            List<EBook> collectionEBooks = user.Collections
+                .First(c => c.CollectionId == collectionId)
                 .EBooks;
             return collectionEBooks;
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new Exception(e.Message);
         }
     }
 
     /// <inheritdoc/>
-    public async Task<bool> RemoveEBookFromCollectionAsync(int userId, int ebookId, int collectionId)
+    public async Task<bool> RemoveEBookFromCollectionAsync(
+        int userId,
+        int ebookId,
+        int collectionId
+    )
     {
         try
         {
@@ -128,9 +147,9 @@ public class CollectionService : ICollectionService
                 throw new Exception();
             }
         }
-        catch
+        catch (Exception e)
         {
-            throw new Exception();
+            throw new Exception(e.Message);
         }
     }
 }

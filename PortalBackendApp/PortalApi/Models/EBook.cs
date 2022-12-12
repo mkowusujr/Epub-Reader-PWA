@@ -1,4 +1,5 @@
-﻿using EpubSharp;
+﻿using System.Diagnostics.CodeAnalysis;
+using EpubSharp;
 using Newtonsoft.Json;
 using PortalApi.Services;
 
@@ -40,6 +41,7 @@ public class EBook
         Collections = collections;
     }
 
+    [ExcludeFromCodeCoverage]
     public EBook()
     {
         // Empty constructor used for ef core

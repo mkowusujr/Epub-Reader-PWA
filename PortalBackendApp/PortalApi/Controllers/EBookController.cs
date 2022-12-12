@@ -65,11 +65,11 @@ public class EBookController : ControllerBase
     /// <param name="userId"></param>
     /// <returns></returns>
     [HttpGet("users/user/{userId}/ebooks")]
-    public ActionResult<List<EBook>> GetEBooksForUser(int userId)
+    public async Task<ActionResult<List<EBook>>> GetEBooksForUser(int userId)
     {
         try
         {
-            return Ok(_eBookService.GetEBooksForUser(userId));
+            return Ok(await _eBookService.GetEBooksForUserAsync(userId));
         }
         catch (Exception e)
         {
