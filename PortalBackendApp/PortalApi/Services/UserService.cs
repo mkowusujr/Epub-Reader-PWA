@@ -47,14 +47,18 @@ public class UserService : IUserService
     }
 
     /// <inheritdoc/>
-    public async Task<User?> GetUserAsync(int userId)
+    public User SignIn(LoginModel loginModel)
     {
         try
         {
-            User? fetechedUser = await _context.Users.FindAsync(userId);
+            User? fetechedUser = _context.Users.First(user => user.Email.Equals(loginModel.Email));
             if (fetechedUser == null)
             {
-                throw new Exception($"User {userId} doesn't exist");
+                throw new Exception($"User with email {loginModel.Email} doesn't exist");
+            }
+            if (!fetechedUser.Password.Equals(loginModel.Password))
+            {
+                throw new Exception("Incorrect password");
             }
             return fetechedUser;
         }

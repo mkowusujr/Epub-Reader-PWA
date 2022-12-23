@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortalApi.Services.Interfaces;
 using PortalApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PortalApi.Controllers;
 
@@ -21,7 +22,7 @@ public class EBookController : ControllerBase
     /// </summary>
     /// <param name="eBookInputModel"></param>
     /// <returns></returns>
-    [HttpPost]
+    [HttpPost, Authorize]
     public async Task<ActionResult<EBook>?> AddBookForUser(EBookInputModel eBookInputModel)
     {
         try
@@ -29,7 +30,7 @@ public class EBookController : ControllerBase
             EBook createdEBook = await _eBookService.AddEBookForUserAsync(eBookInputModel);
             return CreatedAtAction(
                 nameof(GetEBookForUserAsync),
-                new { userId = createdEBook.UserId, eBookId = createdEBook.EBookId },
+                new { eBookId = createdEBook.EBookId },
                 createdEBook
             );
         }
@@ -45,11 +46,12 @@ public class EBookController : ControllerBase
     /// <param name="userId"></param>
     /// <param name="eBookId"></param>
     /// <returns></returns>
-    [HttpGet("users/user/{userId}/ebooks/ebook/{eBookId}")]
-    public async Task<ActionResult<EBook?>> GetEBookForUserAsync(int userId, int eBookId)
+    [HttpGet("ebook/{eBookId}"), Authorize]
+    public async Task<ActionResult<EBook?>> GetEBookForUserAsync(int eBookId)
     {
         try
         {
+            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
             EBook? fetchedEBook = await _eBookService.GetEBookForUserAsync(userId, eBookId);
             return fetchedEBook != null ? Ok(fetchedEBook) : NotFound();
         }
@@ -64,11 +66,12 @@ public class EBookController : ControllerBase
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    [HttpGet("users/user/{userId}/ebooks")]
-    public async Task<ActionResult<List<EBook>>> GetEBooksForUser(int userId)
+    [HttpGet, Authorize]
+    public async Task<ActionResult<List<EBook>>> GetEBooksForUser()
     {
         try
         {
+            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
             return Ok(await _eBookService.GetEBooksForUserAsync(userId));
         }
         catch (Exception e)
@@ -83,11 +86,12 @@ public class EBookController : ControllerBase
     /// <param name="userId"></param>
     /// <param name="eBookId"></param>
     /// <returns></returns>
-    [HttpDelete("users/user/{userId}/ebooks/ebook/{eBookId}")]
-    public async Task<ActionResult<bool>> DeleteEBookForUserAsync(int userId, int eBookId)
+    [HttpDelete("ebook/{eBookId}"), Authorize]
+    public async Task<ActionResult<bool>> DeleteEBookForUserAsync(int eBookId)
     {
         try
         {
+            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
             return Ok(await _eBookService.DeleteEBookForUserAsync(userId, eBookId));
         }
         catch (Exception e)

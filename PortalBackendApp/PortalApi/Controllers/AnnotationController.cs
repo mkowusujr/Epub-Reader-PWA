@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PortalApi.Services.Interfaces;
 using PortalApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PortalApi.Controllers;
 
@@ -22,7 +23,7 @@ public class AnnotationController : ControllerBase
     /// </summary>
     /// <param name="annotation"></param>
     /// <returns></returns>
-    [HttpPost]
+    [HttpPost, Authorize]
     public async Task<ActionResult<Annotation>> AddAnnotationAsync(Annotation annotation)
     {
         try
@@ -32,9 +33,7 @@ public class AnnotationController : ControllerBase
                 nameof(GetAnnotationForEBook),
                 new
                 {
-                    userId = createdAnnotation.UserId,
-                    eBookId = createdAnnotation.EBookId,
-                    annotationId = createdAnnotation.AnnotationId
+                    eBookId = createdAnnotation.EBookId
                 },
                 createdAnnotation
             );
@@ -51,11 +50,12 @@ public class AnnotationController : ControllerBase
     /// <param name="ebookId"></param>
     /// <param name="userId"></param>
     /// <returns></returns>
-    [HttpGet("users/user/{userId}/ebooks/ebook/{ebookId}")]
-    public ActionResult<Annotation> GetAnnotationForEBook(int ebookId, int userId)
+    [HttpGet("ebooks/ebook/{ebookId}"), Authorize]
+    public ActionResult<Annotation> GetAnnotationForEBook(int ebookId)
     {
         try
         {
+            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
             return Ok(_annotationService.GetAnnotationsForEBook(ebookId, userId));
         }
         catch (Exception e)
@@ -69,11 +69,12 @@ public class AnnotationController : ControllerBase
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    [HttpGet("users/user/{userId}")]
-    public ActionResult<List<Annotation>> GetAnnotationsForUser(int userId)
+    [HttpGet, Authorize]
+    public ActionResult<List<Annotation>> GetAnnotationsForUser()
     {
         try
         {
+            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
             return Ok(_annotationService.GetAnnotationsForUser(userId));
         }
         catch (Exception e)
@@ -89,12 +90,15 @@ public class AnnotationController : ControllerBase
     /// <param name="userId"></param>
     /// <param name="annotationId"></param>
     /// <returns></returns>
-    [HttpDelete("users/user/{userId}/ebooks/ebook/{ebookId}/annotations/annotation/{annotationId}")]
-    public ActionResult<bool> DeleteAnnotationForEBookAsync(int ebookId, int userId, int annotationId)
+    [HttpDelete("ebooks/ebook/{ebookId}/annotations/annotation/{annotationId}"), Authorize]
+    public ActionResult<bool> DeleteAnnotationForEBookAsync(int ebookId, int annotationId)
     {
         try
         {
-            return Ok(_annotationService.DeleteAnnotationForEBookAsync(ebookId, userId, annotationId));
+            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
+            return Ok(
+                _annotationService.DeleteAnnotationForEBookAsync(ebookId, userId, annotationId)
+            );
         }
         catch (Exception e)
         {
@@ -109,15 +113,12 @@ public class AnnotationController : ControllerBase
     /// <param name="userId"></param>
     /// <param name="annotationId"></param>
     /// <returns></returns>
-    [HttpGet("users/user/{userId}/ebooks/ebook/{ebookId}/annotations/annotation/{annotationId}")]
-    public async Task<ActionResult<Annotation>> GetAnnotationAsync(
-        int ebookId,
-        int userId,
-        int annotationId
-    )
+    [HttpGet("ebooks/ebook/{ebookId}/annotations/annotation/{annotationId}"), Authorize]
+    public async Task<ActionResult<Annotation>> GetAnnotationAsync(int ebookId, int annotationId)
     {
         try
         {
+            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
             Annotation? fetchedAnnotation = await _annotationService.GetAnnotationAsync(
                 ebookId,
                 userId,

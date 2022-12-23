@@ -18,7 +18,7 @@ public interface IUserService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public Task<User?> GetUserAsync(int userId);
+    public User SignIn(LoginModel loginModel);
 
     /// <summary>
     ///

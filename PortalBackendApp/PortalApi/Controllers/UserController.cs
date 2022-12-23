@@ -43,29 +43,17 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="loginModel"></param>
     /// <returns></returns>
     [HttpPost("login")]
     public ActionResult<AuthenticatedResponse> Login(LoginModel loginModel)
     {
-        return BadRequest();
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <returns></returns>
-    [HttpGet, Authorize]
-    public async Task<ActionResult<User>> GetUserAsync()
-    {
         try
         {
-            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
-            User? fetchedUser = await _userService.GetUserAsync(userId);
-            return fetchedUser != null ? Ok(fetchedUser) : NotFound();
+            User fetchedUser = _userService.SignIn(loginModel);
+            return Ok(CreateJwtToken(fetchedUser));
         }
         catch (Exception e)
         {
@@ -78,11 +66,12 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    [HttpDelete("{userId}"), Authorize]
-    public async Task<ActionResult<bool>> DeleteUserAsync(int userId)
+    [HttpDelete, Authorize]
+    public async Task<ActionResult<bool>> DeleteUserAsync()
     {
         try
         {
+            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
             return Ok(await _userService.DeleteUserAsync(userId));
         }
         catch (Exception e)
@@ -98,12 +87,16 @@ public class UserController : ControllerBase
         var tokeOptions = new JwtSecurityToken(
             issuer: "https://localhost:7042",
             audience: "https://localhost:7042",
-            claims: new List<Claim>(){new Claim("UserId", user.UserId.ToString())},
+            claims: new List<Claim>() { new Claim("UserId", user.UserId.ToString()) },
             expires: DateTime.Now.AddMinutes(5),
             signingCredentials: signinCredentials
         );
         var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
 
-        return new AuthenticatedResponse { Token = tokenString };
+        return new AuthenticatedResponse
+        {
+            Token = tokenString,
+            UserData = new User { Name = user.Name, Email = user.Email }
+        };
     }
 }
