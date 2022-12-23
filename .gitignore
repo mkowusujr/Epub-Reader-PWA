@@ -3,8 +3,8 @@ PortalBackendApp/PortalApi/bin
 PortalBackendApp/PortalApi/obj
 PortalBackendApp/PortalApi.Tests/bin
 PortalBackendApp/PortalApi.Tests/obj
-PortalBackendApp/PortalApi/EBookMetaData.db-wal
-PortalBackendApp/PortalApi/EBookMetaData.db-shm
+PortalBackendApp/PortalApi/Portal.db-wal
+PortalBackendApp/PortalApi/Portal.db-shm
 PortalBackendApp/PortalApi.Tests/coveragereport
 
 # Logs

@@ -2,6 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using PortalApi.Services.Interfaces;
 using PortalApi.Models;
 
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 namespace PortalApi.Controllers;
 
 [ApiController]
@@ -21,17 +27,14 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
-    [HttpPost]
-    public async Task<ActionResult<User>> AddUserAsync(User user)
+    [HttpPost("signup")]
+    public async Task<ActionResult<AuthenticatedResponse>> SignupAsync(User user)
     {
         try
         {
             User createdUser = await _userService.AddUserAsync(user);
-            return CreatedAtAction(
-                nameof(GetUserAsync),
-                new { userId = createdUser.UserId },
-                createdUser
-            );
+
+            return Ok(CreateJwtToken(createdUser));
         }
         catch (Exception e)
         {
@@ -40,15 +43,27 @@ public class UserController : ControllerBase
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="loginModel"></param>
+    /// <returns></returns>
+    [HttpPost("login")]
+    public ActionResult<AuthenticatedResponse> Login(LoginModel loginModel)
+    {
+        return BadRequest();
+    }
+
+    /// <summary>
     ///
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    [HttpGet("{userId}")]
-    public async Task<ActionResult<User>> GetUserAsync(int userId)
+    [HttpGet, Authorize]
+    public async Task<ActionResult<User>> GetUserAsync()
     {
         try
         {
+            int userId = int.Parse(this.User.Claims.First(i => i.Type == "UserId").Value);
             User? fetchedUser = await _userService.GetUserAsync(userId);
             return fetchedUser != null ? Ok(fetchedUser) : NotFound();
         }
@@ -63,7 +78,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    [HttpDelete("{userId}")]
+    [HttpDelete("{userId}"), Authorize]
     public async Task<ActionResult<bool>> DeleteUserAsync(int userId)
     {
         try
@@ -74,5 +89,21 @@ public class UserController : ControllerBase
         {
             return BadRequest(e.Message);
         }
+    }
+
+    private AuthenticatedResponse CreateJwtToken(User user)
+    {
+        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@999"));
+        var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+        var tokeOptions = new JwtSecurityToken(
+            issuer: "https://localhost:7042",
+            audience: "https://localhost:7042",
+            claims: new List<Claim>(){new Claim("UserId", user.UserId.ToString())},
+            expires: DateTime.Now.AddMinutes(5),
+            signingCredentials: signinCredentials
+        );
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+
+        return new AuthenticatedResponse { Token = tokenString };
     }
 }

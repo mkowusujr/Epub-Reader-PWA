@@ -85,7 +85,7 @@ public class CollectionController : ControllerBase
     /// <param name="userId"></param>
     /// <param name="collectionId"></param>
     /// <returns></returns>
-    [HttpGet("users/user/{userId}/collections/collection/{collectionId}")]
+    [HttpGet("users/user/{userId}/collections/collection/{collectionId}/ebooks")]
     public async Task<ActionResult<List<EBook>>> GetEBooksInCollectionForUserAsync(
         int userId,
         int collectionId
